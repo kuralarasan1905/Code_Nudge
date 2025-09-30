@@ -1,0 +1,208 @@
+2025-07-25 00:50:26.271 +05:30 [INF] Starting CodeNudge API application
+2025-07-25 00:50:26.437 +05:30 [FTL] Application terminated unexpectedly
+System.InvalidOperationException: AddEntityFrameworkStores can only be called with a user that derives from IdentityUser<TKey>.
+   at Microsoft.Extensions.DependencyInjection.IdentityEntityFrameworkBuilderExtensions.AddStores(IServiceCollection services, Type userType, Type roleType, Type contextType)
+   at Microsoft.Extensions.DependencyInjection.IdentityEntityFrameworkBuilderExtensions.AddEntityFrameworkStores[TContext](IdentityBuilder builder)
+   at Program.<Main>$(String[] args) in D:\.NetProject\BridgeLabz project\BackEnd\codeN\CodeNudge\CodeNudge\Program.cs:line 78
+2025-07-25 00:54:44.632 +05:30 [INF] Starting CodeNudge API application
+2025-07-25 00:54:45.090 +05:30 [FTL] Application terminated unexpectedly
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Program.<Main>$(String[] args) in D:\.NetProject\BridgeLabz project\BackEnd\codeN\CodeNudge\CodeNudge\Program.cs:line 396
+2025-07-25 00:55:03.614 +05:30 [INF] Starting CodeNudge API application
+2025-07-25 00:55:03.782 +05:30 [FTL] Application terminated unexpectedly
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Program.<Main>$(String[] args) in D:\.NetProject\BridgeLabz project\BackEnd\codeN\CodeNudge\CodeNudge\Program.cs:line 396
+2025-07-25 00:55:33.845 +05:30 [INF] Starting CodeNudge API application
+2025-07-25 00:55:34.902 +05:30 [INF] Start installing Hangfire SQL objects...
+2025-07-25 00:55:36.594 +05:30 [INF] Hangfire SQL objects installed.
+2025-07-25 00:55:37.981 +05:30 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-07-25 00:55:38.072 +05:30 [WRN] The 'InterviewStatus' property 'Status' on entity type 'InterviewSession' is configured with a database-generated default, but has no configured sentinel value. The database-generated default will always be used for inserts when the property has the value '0', since this is the CLR default for the 'InterviewStatus' type. Consider using a nullable type, using a nullable backing field, or setting the sentinel value for the property to ensure the database default is used when, and only when, appropriate. See https://aka.ms/efcore-docs-default-values for more information.
+2025-07-25 00:55:38.077 +05:30 [WRN] The 'SubmissionStatus' property 'Status' on entity type 'Submission' is configured with a database-generated default, but has no configured sentinel value. The database-generated default will always be used for inserts when the property has the value '0', since this is the CLR default for the 'SubmissionStatus' type. Consider using a nullable type, using a nullable backing field, or setting the sentinel value for the property to ensure the database default is used when, and only when, appropriate. See https://aka.ms/efcore-docs-default-values for more information.
+2025-07-25 00:55:38.080 +05:30 [WRN] The 'UserRole' property 'Role' on entity type 'User' is configured with a database-generated default, but has no configured sentinel value. The database-generated default will always be used for inserts when the property has the value '0', since this is the CLR default for the 'UserRole' type. Consider using a nullable type, using a nullable backing field, or setting the sentinel value for the property to ensure the database default is used when, and only when, appropriate. See https://aka.ms/efcore-docs-default-values for more information.
+2025-07-25 00:55:38.339 +05:30 [INF] Executed DbCommand (14ms) [Parameters=[], CommandType='"Text"', CommandTimeout='120']
+SELECT 1
+2025-07-25 00:55:38.370 +05:30 [INF] Executed DbCommand (13ms) [Parameters=[], CommandType='"Text"', CommandTimeout='120']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-07-25 00:55:38.379 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='120']
+SELECT 1
+2025-07-25 00:55:38.384 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='120']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-07-25 00:55:38.412 +05:30 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='120']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-07-25 00:55:38.434 +05:30 [INF] No migrations were applied. The database is already up to date.
+2025-07-25 00:55:38.655 +05:30 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='120']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Users] AS [u]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2025-07-25 00:55:39.337 +05:30 [INF] Executed DbCommand (44ms) [Parameters=[@p0='d0ee680c-aab5-44b5-2f11-08ddcae7df66', @p1='0', @p2='Computer Science' (Size = 100), @p3='CodeNudge University' (Size = 200), @p4='e6228ac4-b897-4749-aed5-266c7f3ee859' (Size = 4000), @p5='2025-07-24T19:25:38.6952858Z', @p6=NULL (Size = 4000), @p7=NULL (DbType = DateTime2), @p8=NULL (Size = 4000), @p9='admin@codenudge.com' (Nullable = false) (Size = 255), @p10='False', @p11='Admin' (Nullable = false) (Size = 50), @p12='2024' (Nullable = true), @p13='False', @p14='True', @p15=NULL (DbType = DateTime2), @p16='User' (Nullable = false) (Size = 50), @p17='False', @p18=NULL (DbType = DateTimeOffset), @p19=NULL (Size = 4000), @p20=NULL (Size = 4000), @p21='$2a$11$jgXHs8Ql.DOySmeM6Kh1ZOnfJewB8RnOvBQASrd4m5gLn0I4IZpFe' (Nullable = false) (Size = 500), @p22=NULL (Size = 15), @p23='False', @p24=NULL (Size = 500), @p25='2', @p26=NULL (Size = 4000), @p27='False', @p28=NULL (DbType = DateTime2), @p29=NULL (Size = 4000), @p30=NULL (Size = 4000)], CommandType='"Text"', CommandTimeout='120']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Users] ([Id], [AccessFailedCount], [Branch], [College], [ConcurrencyStamp], [CreatedAt], [CreatedBy], [DeletedAt], [DeletedBy], [Email], [EmailConfirmed], [FirstName], [GraduationYear], [IsDeleted], [IsEmailVerified], [LastLoginAt], [LastName], [LockoutEnabled], [LockoutEnd], [NormalizedEmail], [NormalizedUserName], [PasswordHash], [PhoneNumber], [PhoneNumberConfirmed], [ProfilePicture], [Role], [SecurityStamp], [TwoFactorEnabled], [UpdatedAt], [UpdatedBy], [UserName])
+OUTPUT INSERTED.[IsActive]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18, @p19, @p20, @p21, @p22, @p23, @p24, @p25, @p26, @p27, @p28, @p29, @p30);
+2025-07-25 00:55:39.365 +05:30 [INF] Database initialized successfully
+2025-07-25 00:55:39.371 +05:30 [INF] CodeNudge API started successfully
+2025-07-25 00:55:39.398 +05:30 [INF] User profile is available. Using 'C:\Users\kural\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-07-25 00:55:39.493 +05:30 [WRN] The WebRootPath was not found: D:\.NetProject\BridgeLabz project\BackEnd\codeN\CodeNudge\CodeNudge\wwwroot. Static files may be unavailable.
+2025-07-25 00:55:39.545 +05:30 [INF] Now listening on: http://localhost:5231
+2025-07-25 00:55:39.555 +05:30 [INF] Starting Hangfire Server using job storage: 'SQL Server: KURALARASAN\SQLEXPRESS@CodeNudgeDb_Dev'
+2025-07-25 00:55:39.556 +05:30 [INF] Using the following options for SQL Server job storage: Queue poll interval: 00:00:00.
+2025-07-25 00:55:39.558 +05:30 [INF] Using the following options for Hangfire Server:
+    Worker count: 20
+    Listening queues: 'default'
+    Shutdown timeout: 00:00:15
+    Schedule polling interval: 00:00:15
+2025-07-25 00:55:39.587 +05:30 [INF] Application started. Press Ctrl+C to shut down.
+2025-07-25 00:55:39.590 +05:30 [INF] Hosting environment: Development
+2025-07-25 00:55:39.592 +05:30 [INF] Content root path: D:\.NetProject\BridgeLabz project\BackEnd\codeN\CodeNudge\CodeNudge
+2025-07-25 00:55:39.689 +05:30 [INF] Server kuralarasan:25928:3318c734 successfully announced in 102.3909 ms
+2025-07-25 00:55:39.697 +05:30 [INF] Server kuralarasan:25928:3318c734 is starting the registered dispatchers: ServerWatchdog, ServerJobCancellationWatcher, ExpirationManager, CountersAggregator, SqlServerHeartbeatProcess, Worker, DelayedJobScheduler, RecurringJobScheduler...
+2025-07-25 00:55:39.720 +05:30 [INF] Server kuralarasan:25928:3318c734 all the dispatchers started
+2025-07-25 00:56:53.593 +05:30 [INF] Starting CodeNudge API application
+2025-07-25 00:56:54.027 +05:30 [INF] Start installing Hangfire SQL objects...
+2025-07-25 00:56:54.842 +05:30 [INF] Hangfire SQL objects installed.
+2025-07-25 00:56:56.015 +05:30 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-07-25 00:56:56.086 +05:30 [WRN] The 'InterviewStatus' property 'Status' on entity type 'InterviewSession' is configured with a database-generated default, but has no configured sentinel value. The database-generated default will always be used for inserts when the property has the value '0', since this is the CLR default for the 'InterviewStatus' type. Consider using a nullable type, using a nullable backing field, or setting the sentinel value for the property to ensure the database default is used when, and only when, appropriate. See https://aka.ms/efcore-docs-default-values for more information.
+2025-07-25 00:56:56.089 +05:30 [WRN] The 'SubmissionStatus' property 'Status' on entity type 'Submission' is configured with a database-generated default, but has no configured sentinel value. The database-generated default will always be used for inserts when the property has the value '0', since this is the CLR default for the 'SubmissionStatus' type. Consider using a nullable type, using a nullable backing field, or setting the sentinel value for the property to ensure the database default is used when, and only when, appropriate. See https://aka.ms/efcore-docs-default-values for more information.
+2025-07-25 00:56:56.092 +05:30 [WRN] The 'UserRole' property 'Role' on entity type 'User' is configured with a database-generated default, but has no configured sentinel value. The database-generated default will always be used for inserts when the property has the value '0', since this is the CLR default for the 'UserRole' type. Consider using a nullable type, using a nullable backing field, or setting the sentinel value for the property to ensure the database default is used when, and only when, appropriate. See https://aka.ms/efcore-docs-default-values for more information.
+2025-07-25 00:56:56.332 +05:30 [INF] Executed DbCommand (17ms) [Parameters=[], CommandType='"Text"', CommandTimeout='120']
+SELECT 1
+2025-07-25 00:56:56.360 +05:30 [INF] Executed DbCommand (11ms) [Parameters=[], CommandType='"Text"', CommandTimeout='120']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-07-25 00:56:56.367 +05:30 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='120']
+SELECT 1
+2025-07-25 00:56:56.372 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='120']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-07-25 00:56:56.393 +05:30 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='120']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-07-25 00:56:56.415 +05:30 [INF] No migrations were applied. The database is already up to date.
+2025-07-25 00:56:56.623 +05:30 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='120']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Users] AS [u]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2025-07-25 00:56:56.640 +05:30 [INF] Database initialized successfully
+2025-07-25 00:56:56.646 +05:30 [INF] CodeNudge API started successfully
+2025-07-25 00:56:56.660 +05:30 [INF] User profile is available. Using 'C:\Users\kural\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-07-25 00:56:56.744 +05:30 [WRN] The WebRootPath was not found: D:\.NetProject\BridgeLabz project\BackEnd\codeN\CodeNudge\CodeNudge\wwwroot. Static files may be unavailable.
+2025-07-25 00:56:56.777 +05:30 [INF] Now listening on: http://localhost:5231
+2025-07-25 00:56:56.784 +05:30 [INF] Starting Hangfire Server using job storage: 'SQL Server: KURALARASAN\SQLEXPRESS@CodeNudgeDb_Dev'
+2025-07-25 00:56:56.786 +05:30 [INF] Using the following options for SQL Server job storage: Queue poll interval: 00:00:00.
+2025-07-25 00:56:56.787 +05:30 [INF] Using the following options for Hangfire Server:
+    Worker count: 20
+    Listening queues: 'default'
+    Shutdown timeout: 00:00:15
+    Schedule polling interval: 00:00:15
+2025-07-25 00:56:56.801 +05:30 [INF] Application started. Press Ctrl+C to shut down.
+2025-07-25 00:56:56.803 +05:30 [INF] Hosting environment: Development
+2025-07-25 00:56:56.805 +05:30 [INF] Content root path: D:\.NetProject\BridgeLabz project\BackEnd\codeN\CodeNudge\CodeNudge
+2025-07-25 00:56:56.930 +05:30 [INF] Server kuralarasan:13024:0b8c52a3 successfully announced in 127.9499 ms
+2025-07-25 00:56:56.933 +05:30 [INF] Server kuralarasan:13024:0b8c52a3 is starting the registered dispatchers: ServerWatchdog, ServerJobCancellationWatcher, ExpirationManager, CountersAggregator, SqlServerHeartbeatProcess, Worker, DelayedJobScheduler, RecurringJobScheduler...
+2025-07-25 00:56:56.950 +05:30 [INF] Server kuralarasan:13024:0b8c52a3 all the dispatchers started
+2025-07-25 00:59:27.426 +05:30 [WRN] Stopping the server due to DomainUnload or ProcessExit event...
+2025-07-25 00:59:27.428 +05:30 [INF] Server kuralarasan:13024:0b8c52a3 caught stopping signal...
+2025-07-25 00:59:27.436 +05:30 [INF] Server kuralarasan:13024:0b8c52a3 caught stopped signal...
+2025-07-25 00:59:27.440 +05:30 [WRN] Server kuralarasan:13024:0b8c52a3 caught shutdown signal...
+2025-07-25 00:59:27.440 +05:30 [INF] Server kuralarasan:13024:0b8c52a3 All dispatchers stopped
+2025-07-25 00:59:27.464 +05:30 [INF] Server kuralarasan:13024:0b8c52a3 successfully reported itself as stopped in 17.7998 ms
+2025-07-25 00:59:27.466 +05:30 [INF] Server kuralarasan:13024:0b8c52a3 has been stopped in total 30.822 ms
+2025-07-25 01:02:02.865 +05:30 [INF] Starting CodeNudge API application
+2025-07-25 01:02:04.147 +05:30 [WRN] The 'InterviewStatus' property 'Status' on entity type 'InterviewSession' is configured with a database-generated default, but has no configured sentinel value. The database-generated default will always be used for inserts when the property has the value '0', since this is the CLR default for the 'InterviewStatus' type. Consider using a nullable type, using a nullable backing field, or setting the sentinel value for the property to ensure the database default is used when, and only when, appropriate. See https://aka.ms/efcore-docs-default-values for more information.
+2025-07-25 01:02:04.153 +05:30 [WRN] The 'SubmissionStatus' property 'Status' on entity type 'Submission' is configured with a database-generated default, but has no configured sentinel value. The database-generated default will always be used for inserts when the property has the value '0', since this is the CLR default for the 'SubmissionStatus' type. Consider using a nullable type, using a nullable backing field, or setting the sentinel value for the property to ensure the database default is used when, and only when, appropriate. See https://aka.ms/efcore-docs-default-values for more information.
+2025-07-25 01:02:04.156 +05:30 [WRN] The 'UserRole' property 'Role' on entity type 'User' is configured with a database-generated default, but has no configured sentinel value. The database-generated default will always be used for inserts when the property has the value '0', since this is the CLR default for the 'UserRole' type. Consider using a nullable type, using a nullable backing field, or setting the sentinel value for the property to ensure the database default is used when, and only when, appropriate. See https://aka.ms/efcore-docs-default-values for more information.
+2025-07-25 01:02:04.940 +05:30 [INF] Executed DbCommand (40ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-07-25 01:02:04.987 +05:30 [INF] Executed DbCommand (29ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-07-25 01:02:04.996 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-07-25 01:02:05.000 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-07-25 01:02:05.049 +05:30 [INF] Executed DbCommand (29ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-07-25 01:02:05.072 +05:30 [INF] No migrations were applied. The database is already up to date.
+2025-07-25 01:02:05.343 +05:30 [INF] Executed DbCommand (11ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Users] AS [u]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2025-07-25 01:02:05.348 +05:30 [INF] Database initialized successfully
+2025-07-25 01:02:05.353 +05:30 [INF] CodeNudge API started successfully
+2025-07-25 01:02:05.382 +05:30 [INF] User profile is available. Using 'C:\Users\kural\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-07-25 01:02:05.520 +05:30 [INF] Now listening on: http://localhost:5231
+2025-07-25 01:02:05.524 +05:30 [INF] Application started. Press Ctrl+C to shut down.
+2025-07-25 01:02:05.526 +05:30 [INF] Hosting environment: Development
+2025-07-25 01:02:05.527 +05:30 [INF] Content root path: D:\.NetProject\BridgeLabz project\BackEnd\codeN\CodeNudge\CodeNudge
+2025-07-25 01:02:37.357 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5231/swagger - null null
+2025-07-25 01:02:37.657 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5231/swagger - 301 0 null 303.2654ms
+2025-07-25 01:02:37.684 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5231/swagger/index.html - null null
+2025-07-25 01:02:37.912 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5231/swagger/index.html - 200 null text/html;charset=utf-8 228.5484ms
+2025-07-25 01:02:38.001 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5231/swagger/swagger-ui-bundle.js - null null
+2025-07-25 01:02:38.001 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5231/swagger/swagger-ui-standalone-preset.js - null null
+2025-07-25 01:02:38.007 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5231/swagger/swagger-ui.css - null null
+2025-07-25 01:02:38.084 +05:30 [INF] Sending file. Request path: '/swagger-ui-standalone-preset.js'. Physical path: 'N/A'
+2025-07-25 01:02:38.084 +05:30 [INF] Sending file. Request path: '/swagger-ui.css'. Physical path: 'N/A'
+2025-07-25 01:02:38.117 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5231/swagger/swagger-ui-standalone-preset.js - 200 230280 text/javascript 116.6137ms
+2025-07-25 01:02:38.133 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5231/swagger/swagger-ui.css - 200 152034 text/css 125.4136ms
+2025-07-25 01:02:38.164 +05:30 [INF] Sending file. Request path: '/swagger-ui-bundle.js'. Physical path: 'N/A'
+2025-07-25 01:02:38.227 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5231/swagger/swagger-ui-bundle.js - 200 1456926 text/javascript 226.8023ms
+2025-07-25 01:02:38.702 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5231/swagger/v1/swagger.json - null null
+2025-07-25 01:02:38.944 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5231/swagger/favicon-32x32.png - null null
+2025-07-25 01:02:39.039 +05:30 [ERR] An unhandled exception has occurred while executing the request.
+Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Failed to generate Operation for action - CodeNudge.Presentation.Controllers.AdminController.BulkImportQuestions (CodeNudge). See inner exception
+ ---> Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Error reading parameter(s) for action CodeNudge.Presentation.Controllers.AdminController.BulkImportQuestions (CodeNudge) as [FromForm] attribute used with IFormFile. Please refer to https://github.com/domaindrivendev/Swashbuckle.AspNetCore#handle-forms-and-file-uploads for more information
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateParameters(ApiDescription apiDescription, SchemaRepository schemaRespository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperation(ApiDescription apiDescription, SchemaRepository schemaRepository)
+   --- End of inner exception stack trace ---
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperation(ApiDescription apiDescription, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperations(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePaths(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerDocumentWithoutFilters(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerAsync(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-07-25 01:02:39.050 +05:30 [INF] Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+2025-07-25 01:02:39.152 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5231/swagger/v1/swagger.json - 500 null text/plain; charset=utf-8 449.7114ms
+2025-07-25 01:02:39.164 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5231/swagger/favicon-32x32.png - 200 628 image/png 220.1183ms
+2025-07-25 01:04:07.305 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5231/swagger/index.html - null null
+2025-07-25 01:04:07.482 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5231/swagger/index.html - 200 null text/html;charset=utf-8 221.0516ms
+2025-07-25 01:04:07.901 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5231/swagger/v1/swagger.json - null null
+2025-07-25 01:04:08.108 +05:30 [ERR] An unhandled exception has occurred while executing the request.
+Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Failed to generate Operation for action - CodeNudge.Presentation.Controllers.AdminController.BulkImportQuestions (CodeNudge). See inner exception
+ ---> Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Error reading parameter(s) for action CodeNudge.Presentation.Controllers.AdminController.BulkImportQuestions (CodeNudge) as [FromForm] attribute used with IFormFile. Please refer to https://github.com/domaindrivendev/Swashbuckle.AspNetCore#handle-forms-and-file-uploads for more information
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateParameters(ApiDescription apiDescription, SchemaRepository schemaRespository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperation(ApiDescription apiDescription, SchemaRepository schemaRepository)
+   --- End of inner exception stack trace ---
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperation(ApiDescription apiDescription, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperations(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePaths(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerDocumentWithoutFilters(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerAsync(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-07-25 01:04:08.158 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5231/swagger/v1/swagger.json - 500 null text/plain; charset=utf-8 257.1049ms

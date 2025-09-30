@@ -1,0 +1,230 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\.NetProject\\code_nudge\\code_Nudge\\BackEnd\\codeN\\CodeNudge\\CodeNudge_backend\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{9EE39EE7-AFCA-6A9D-242E-3028FC433E03}|CodeNudge.csproj|d:\\.netproject\\code_nudge\\code_nudge\\backend\\coden\\codenudge\\codenudge_backend\\infrastructure\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9EE39EE7-AFCA-6A9D-242E-3028FC433E03}|CodeNudge.csproj|solutionrelative:infrastructure\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9EE39EE7-AFCA-6A9D-242E-3028FC433E03}|CodeNudge.csproj|d:\\.netproject\\code_nudge\\code_nudge\\backend\\coden\\codenudge\\codenudge_backend\\presentation\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9EE39EE7-AFCA-6A9D-242E-3028FC433E03}|CodeNudge.csproj|solutionrelative:presentation\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9EE39EE7-AFCA-6A9D-242E-3028FC433E03}|CodeNudge.csproj|d:\\.netproject\\code_nudge\\code_nudge\\backend\\coden\\codenudge\\codenudge_backend\\core\\application\\handlers\\questions\\createquestionhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9EE39EE7-AFCA-6A9D-242E-3028FC433E03}|CodeNudge.csproj|solutionrelative:core\\application\\handlers\\questions\\createquestionhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9EE39EE7-AFCA-6A9D-242E-3028FC433E03}|CodeNudge.csproj|d:\\.netproject\\code_nudge\\code_nudge\\backend\\coden\\codenudge\\codenudge_backend\\infrastructure\\data\\repositories\\hrquestionrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9EE39EE7-AFCA-6A9D-242E-3028FC433E03}|CodeNudge.csproj|solutionrelative:infrastructure\\data\\repositories\\hrquestionrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9EE39EE7-AFCA-6A9D-242E-3028FC433E03}|CodeNudge.csproj|d:\\.netproject\\code_nudge\\code_nudge\\backend\\coden\\codenudge\\codenudge_backend\\core\\application\\handlers\\hrquestions\\gethrquestionshandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9EE39EE7-AFCA-6A9D-242E-3028FC433E03}|CodeNudge.csproj|solutionrelative:core\\application\\handlers\\hrquestions\\gethrquestionshandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9EE39EE7-AFCA-6A9D-242E-3028FC433E03}|CodeNudge.csproj|d:\\.netproject\\code_nudge\\code_nudge\\backend\\coden\\codenudge\\codenudge_backend\\core\\application\\interfaces\\ihrquestionrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9EE39EE7-AFCA-6A9D-242E-3028FC433E03}|CodeNudge.csproj|solutionrelative:core\\application\\interfaces\\ihrquestionrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9EE39EE7-AFCA-6A9D-242E-3028FC433E03}|CodeNudge.csproj|d:\\.netproject\\code_nudge\\code_nudge\\backend\\coden\\codenudge\\codenudge_backend\\core\\application\\handlers\\dashboard\\getdashboardhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9EE39EE7-AFCA-6A9D-242E-3028FC433E03}|CodeNudge.csproj|solutionrelative:core\\application\\handlers\\dashboard\\getdashboardhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9EE39EE7-AFCA-6A9D-242E-3028FC433E03}|CodeNudge.csproj|d:\\.netproject\\code_nudge\\code_nudge\\backend\\coden\\codenudge\\codenudge_backend\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{9EE39EE7-AFCA-6A9D-242E-3028FC433E03}|CodeNudge.csproj|solutionrelative:appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9EE39EE7-AFCA-6A9D-242E-3028FC433E03}|CodeNudge.csproj|d:\\.netproject\\code_nudge\\code_nudge\\backend\\coden\\codenudge\\codenudge_backend\\presentation\\controllers\\dashboardcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9EE39EE7-AFCA-6A9D-242E-3028FC433E03}|CodeNudge.csproj|solutionrelative:presentation\\controllers\\dashboardcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9EE39EE7-AFCA-6A9D-242E-3028FC433E03}|CodeNudge.csproj|d:\\.netproject\\code_nudge\\code_nudge\\backend\\coden\\codenudge\\codenudge_backend\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{9EE39EE7-AFCA-6A9D-242E-3028FC433E03}|CodeNudge.csproj|solutionrelative:properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9EE39EE7-AFCA-6A9D-242E-3028FC433E03}|CodeNudge.csproj|d:\\.netproject\\code_nudge\\code_nudge\\backend\\coden\\codenudge\\codenudge_backend\\presentation\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9EE39EE7-AFCA-6A9D-242E-3028FC433E03}|CodeNudge.csproj|solutionrelative:presentation\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 13,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{e1b7d1f8-9b3c-49b1-8f4f-bfc63a88835d}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:130:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "IHRQuestionRepository.cs",
+              "DocumentMoniker": "D:\\.NetProject\\code_nudge\\code_Nudge\\BackEnd\\codeN\\CodeNudge\\CodeNudge_backend\\Core\\Application\\Interfaces\\IHRQuestionRepository.cs",
+              "RelativeDocumentMoniker": "Core\\Application\\Interfaces\\IHRQuestionRepository.cs",
+              "ToolTip": "D:\\.NetProject\\code_nudge\\code_Nudge\\BackEnd\\codeN\\CodeNudge\\CodeNudge_backend\\Core\\Application\\Interfaces\\IHRQuestionRepository.cs",
+              "RelativeToolTip": "Core\\Application\\Interfaces\\IHRQuestionRepository.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-29T19:01:20.503Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "GetHRQuestionsHandler.cs",
+              "DocumentMoniker": "D:\\.NetProject\\code_nudge\\code_Nudge\\BackEnd\\codeN\\CodeNudge\\CodeNudge_backend\\Core\\Application\\Handlers\\HRQuestions\\GetHRQuestionsHandler.cs",
+              "RelativeDocumentMoniker": "Core\\Application\\Handlers\\HRQuestions\\GetHRQuestionsHandler.cs",
+              "ToolTip": "D:\\.NetProject\\code_nudge\\code_Nudge\\BackEnd\\codeN\\CodeNudge\\CodeNudge_backend\\Core\\Application\\Handlers\\HRQuestions\\GetHRQuestionsHandler.cs",
+              "RelativeToolTip": "Core\\Application\\Handlers\\HRQuestions\\GetHRQuestionsHandler.cs",
+              "ViewState": "AgIAABsAAAAAAAAAAAAYwB8AAABTAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-29T19:00:59.648Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "HRQuestionRepository.cs",
+              "DocumentMoniker": "D:\\.NetProject\\code_nudge\\code_Nudge\\BackEnd\\codeN\\CodeNudge\\CodeNudge_backend\\Infrastructure\\Data\\Repositories\\HRQuestionRepository.cs",
+              "RelativeDocumentMoniker": "Infrastructure\\Data\\Repositories\\HRQuestionRepository.cs",
+              "ToolTip": "D:\\.NetProject\\code_nudge\\code_Nudge\\BackEnd\\codeN\\CodeNudge\\CodeNudge_backend\\Infrastructure\\Data\\Repositories\\HRQuestionRepository.cs",
+              "RelativeToolTip": "Infrastructure\\Data\\Repositories\\HRQuestionRepository.cs",
+              "ViewState": "AgIAAD8AAAAAAAAAAAAYwF8AAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-29T19:00:26.129Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "CreateQuestionHandler.cs",
+              "DocumentMoniker": "D:\\.NetProject\\code_nudge\\code_Nudge\\BackEnd\\codeN\\CodeNudge\\CodeNudge_backend\\Core\\Application\\Handlers\\Questions\\CreateQuestionHandler.cs",
+              "RelativeDocumentMoniker": "Core\\Application\\Handlers\\Questions\\CreateQuestionHandler.cs",
+              "ToolTip": "D:\\.NetProject\\code_nudge\\code_Nudge\\BackEnd\\codeN\\CodeNudge\\CodeNudge_backend\\Core\\Application\\Handlers\\Questions\\CreateQuestionHandler.cs",
+              "RelativeToolTip": "Core\\Application\\Handlers\\Questions\\CreateQuestionHandler.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAFgAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-29T18:59:50.222Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "D:\\.NetProject\\code_nudge\\code_Nudge\\BackEnd\\codeN\\CodeNudge\\CodeNudge_backend\\Presentation\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "Presentation\\Controllers\\AuthController.cs",
+              "ToolTip": "D:\\.NetProject\\code_nudge\\code_Nudge\\BackEnd\\codeN\\CodeNudge\\CodeNudge_backend\\Presentation\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "Presentation\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAABwAAAAAAAAAAAApwDYAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-29T09:56:34.963Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "AuthService.cs",
+              "DocumentMoniker": "D:\\.NetProject\\code_nudge\\code_Nudge\\BackEnd\\codeN\\CodeNudge\\CodeNudge_backend\\Infrastructure\\Services\\AuthService.cs",
+              "RelativeDocumentMoniker": "Infrastructure\\Services\\AuthService.cs",
+              "ToolTip": "D:\\.NetProject\\code_nudge\\code_Nudge\\BackEnd\\codeN\\CodeNudge\\CodeNudge_backend\\Infrastructure\\Services\\AuthService.cs",
+              "RelativeToolTip": "Infrastructure\\Services\\AuthService.cs",
+              "ViewState": "AgIAAFcAAAAAAAAAAAApwF8AAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-29T14:11:49.534Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "GetDashboardHandler.cs",
+              "DocumentMoniker": "D:\\.NetProject\\code_nudge\\code_Nudge\\BackEnd\\codeN\\CodeNudge\\CodeNudge_backend\\Core\\Application\\Handlers\\Dashboard\\GetDashboardHandler.cs",
+              "RelativeDocumentMoniker": "Core\\Application\\Handlers\\Dashboard\\GetDashboardHandler.cs",
+              "ToolTip": "D:\\.NetProject\\code_nudge\\code_Nudge\\BackEnd\\codeN\\CodeNudge\\CodeNudge_backend\\Core\\Application\\Handlers\\Dashboard\\GetDashboardHandler.cs",
+              "RelativeToolTip": "Core\\Application\\Handlers\\Dashboard\\GetDashboardHandler.cs",
+              "ViewState": "AgIAADAAAAAAAAAAAAAYwEAAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-29T18:59:22.938Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "DashboardController.cs",
+              "DocumentMoniker": "D:\\.NetProject\\code_nudge\\code_Nudge\\BackEnd\\codeN\\CodeNudge\\CodeNudge_backend\\Presentation\\Controllers\\DashboardController.cs",
+              "RelativeDocumentMoniker": "Presentation\\Controllers\\DashboardController.cs",
+              "ToolTip": "D:\\.NetProject\\code_nudge\\code_Nudge\\BackEnd\\codeN\\CodeNudge\\CodeNudge_backend\\Presentation\\Controllers\\DashboardController.cs",
+              "RelativeToolTip": "Presentation\\Controllers\\DashboardController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-29T14:11:18.206Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "D:\\.NetProject\\code_nudge\\code_Nudge\\BackEnd\\codeN\\CodeNudge\\CodeNudge_backend\\Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "Properties\\launchSettings.json",
+              "ToolTip": "D:\\.NetProject\\code_nudge\\code_Nudge\\BackEnd\\codeN\\CodeNudge\\CodeNudge_backend\\Properties\\launchSettings.json",
+              "RelativeToolTip": "Properties\\launchSettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-09-29T13:56:29.514Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "AdminController.cs",
+              "DocumentMoniker": "D:\\.NetProject\\code_nudge\\code_Nudge\\BackEnd\\codeN\\CodeNudge\\CodeNudge_backend\\Presentation\\Controllers\\AdminController.cs",
+              "RelativeDocumentMoniker": "Presentation\\Controllers\\AdminController.cs",
+              "ToolTip": "D:\\.NetProject\\code_nudge\\code_Nudge\\BackEnd\\codeN\\CodeNudge\\CodeNudge_backend\\Presentation\\Controllers\\AdminController.cs",
+              "RelativeToolTip": "Presentation\\Controllers\\AdminController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-29T06:19:21.978Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "appsettings.Development.json",
+              "DocumentMoniker": "D:\\.NetProject\\code_nudge\\code_Nudge\\BackEnd\\codeN\\CodeNudge\\CodeNudge_backend\\appsettings.Development.json",
+              "RelativeDocumentMoniker": "appsettings.Development.json",
+              "ToolTip": "D:\\.NetProject\\code_nudge\\code_Nudge\\BackEnd\\codeN\\CodeNudge\\CodeNudge_backend\\appsettings.Development.json",
+              "RelativeToolTip": "appsettings.Development.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-09-29T06:19:07.379Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

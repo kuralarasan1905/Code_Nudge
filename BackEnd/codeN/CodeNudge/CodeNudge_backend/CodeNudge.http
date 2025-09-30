@@ -1,0 +1,6 @@
+@CodeNudge_HostAddress = http://localhost:5230
+
+GET {{CodeNudge_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

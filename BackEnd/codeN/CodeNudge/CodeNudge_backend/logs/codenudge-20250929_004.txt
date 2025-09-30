@@ -1,0 +1,7 @@
+2025-09-29 20:27:31.498 +05:30 [INF] Starting CodeNudge API application
+2025-09-29 20:27:31.853 +05:30 [INF] CodeNudge API started successfully
+2025-09-29 20:27:31.884 +05:30 [INF] User profile is available. Using 'C:\Users\kural\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-09-29 20:27:31.982 +05:30 [INF] Now listening on: http://localhost:5000
+2025-09-29 20:27:31.985 +05:30 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-29 20:27:31.986 +05:30 [INF] Hosting environment: Production
+2025-09-29 20:27:31.987 +05:30 [INF] Content root path: D:\.NetProject\code_nudge\code_Nudge\BackEnd\codeN\CodeNudge\CodeNudge_backend

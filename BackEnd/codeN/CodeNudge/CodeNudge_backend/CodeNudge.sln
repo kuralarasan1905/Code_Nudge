@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeNudge", "CodeNudge.csproj", "{9EE39EE7-AFCA-6A9D-242E-3028FC433E03}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9EE39EE7-AFCA-6A9D-242E-3028FC433E03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EE39EE7-AFCA-6A9D-242E-3028FC433E03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9EE39EE7-AFCA-6A9D-242E-3028FC433E03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9EE39EE7-AFCA-6A9D-242E-3028FC433E03}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9F080ACD-9128-440F-95B9-CD0F6158AB67}
+	EndGlobalSection
+EndGlobal

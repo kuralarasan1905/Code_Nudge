@@ -1,0 +1,128 @@
+2025-09-29 20:49:37.183 +05:30 [INF] Starting CodeNudge API application
+2025-09-29 20:49:39.505 +05:30 [INF] CodeNudge API started successfully
+2025-09-29 20:49:39.632 +05:30 [INF] User profile is available. Using 'C:\Users\kural\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-09-29 20:49:40.090 +05:30 [ERR] Hosting failed to start
+System.IO.IOException: Failed to bind to address http://127.0.0.1:5188: address already in use.
+ ---> Microsoft.AspNetCore.Connections.AddressInUseException: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+ ---> System.Net.Sockets.SocketException (10048): Only one usage of each socket address (protocol/network address/port) is normally permitted.
+   at System.Net.Sockets.Socket.UpdateStatusAfterSocketErrorAndThrowException(SocketError error, Boolean disconnectOnFailure, String callerName)
+   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.LocalhostListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.AddressesStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindAsync(ListenOptions[] listenOptions, AddressBindContext context, Func`2 useHttps, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__15_1(IHostedService service, CancellationToken token)
+   at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)
+2025-09-29 20:49:40.463 +05:30 [FTL] Application terminated unexpectedly
+System.IO.IOException: Failed to bind to address http://127.0.0.1:5188: address already in use.
+ ---> Microsoft.AspNetCore.Connections.AddressInUseException: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+ ---> System.Net.Sockets.SocketException (10048): Only one usage of each socket address (protocol/network address/port) is normally permitted.
+   at System.Net.Sockets.Socket.UpdateStatusAfterSocketErrorAndThrowException(SocketError error, Boolean disconnectOnFailure, String callerName)
+   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.LocalhostListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.AddressesStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindAsync(ListenOptions[] listenOptions, AddressBindContext context, Func`2 useHttps, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__15_1(IHostedService service, CancellationToken token)
+   at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)
+   at Microsoft.Extensions.Hosting.Internal.Host.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.RunAsync(IHost host, CancellationToken token)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.RunAsync(IHost host, CancellationToken token)
+   at Program.<Main>$(String[] args) in D:\.NetProject\code_nudge\code_Nudge\BackEnd\codeN\CodeNudge\CodeNudge_backend\Program.cs:line 266
+2025-09-29 21:02:12.233 +05:30 [INF] Starting CodeNudge API application
+2025-09-29 21:02:12.952 +05:30 [INF] CodeNudge API started successfully
+2025-09-29 21:02:13.003 +05:30 [INF] User profile is available. Using 'C:\Users\kural\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-09-29 21:02:13.195 +05:30 [INF] Now listening on: http://localhost:5188
+2025-09-29 21:02:13.199 +05:30 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-29 21:02:13.200 +05:30 [INF] Hosting environment: Development
+2025-09-29 21:02:13.201 +05:30 [INF] Content root path: D:\.NetProject\code_nudge\code_Nudge\BackEnd\codeN\CodeNudge\CodeNudge_backend
+2025-09-29 21:03:28.381 +05:30 [INF] Starting CodeNudge API application
+2025-09-29 21:03:28.771 +05:30 [INF] CodeNudge API started successfully
+2025-09-29 21:03:28.809 +05:30 [INF] User profile is available. Using 'C:\Users\kural\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-09-29 21:03:28.921 +05:30 [INF] Now listening on: http://localhost:5188
+2025-09-29 21:03:28.925 +05:30 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-29 21:03:28.927 +05:30 [INF] Hosting environment: Development
+2025-09-29 21:03:28.928 +05:30 [INF] Content root path: D:\.NetProject\code_nudge\code_Nudge\BackEnd\codeN\CodeNudge\CodeNudge_backend
+2025-09-29 21:04:10.477 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5188/swagger/index.html - null null
+2025-09-29 21:04:10.696 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5188/swagger/index.html - 200 null text/html;charset=utf-8 222.5881ms
+2025-09-29 21:04:11.755 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5188/swagger/v1/swagger.json - null null
+2025-09-29 21:04:12.146 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5188/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 391.4663ms
+2025-09-29 21:06:33.306 +05:30 [INF] Application is shutting down...
+2025-09-29 21:08:54.551 +05:30 [INF] Starting CodeNudge API application
+2025-09-29 21:08:55.145 +05:30 [INF] CodeNudge API started successfully
+2025-09-29 21:08:55.201 +05:30 [INF] User profile is available. Using 'C:\Users\kural\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-09-29 21:08:55.382 +05:30 [INF] Now listening on: http://localhost:5188
+2025-09-29 21:08:55.385 +05:30 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-29 21:08:55.386 +05:30 [INF] Hosting environment: Development
+2025-09-29 21:08:55.388 +05:30 [INF] Content root path: D:\.NetProject\code_nudge\code_Nudge\BackEnd\codeN\CodeNudge\CodeNudge_backend
+2025-09-29 21:11:52.396 +05:30 [INF] Application is shutting down...
+2025-09-29 21:16:26.337 +05:30 [INF] Starting CodeNudge API application
+2025-09-29 21:16:27.006 +05:30 [INF] CodeNudge API started successfully
+2025-09-29 21:16:27.071 +05:30 [INF] User profile is available. Using 'C:\Users\kural\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-09-29 21:16:27.301 +05:30 [INF] Now listening on: http://localhost:5188
+2025-09-29 21:16:27.303 +05:30 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-29 21:16:27.305 +05:30 [INF] Hosting environment: Development
+2025-09-29 21:16:27.306 +05:30 [INF] Content root path: D:\.NetProject\code_nudge\code_Nudge\BackEnd\codeN\CodeNudge\CodeNudge_backend
+2025-09-29 21:19:04.958 +05:30 [INF] Application is shutting down...
+2025-09-29 21:19:45.737 +05:30 [INF] Starting CodeNudge API application
+2025-09-29 21:19:48.022 +05:30 [INF] CodeNudge API started successfully
+2025-09-29 21:19:48.205 +05:30 [INF] User profile is available. Using 'C:\Users\kural\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-09-29 21:19:49.001 +05:30 [INF] Now listening on: http://localhost:5188
+2025-09-29 21:19:49.178 +05:30 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-29 21:19:49.184 +05:30 [INF] Hosting environment: Development
+2025-09-29 21:19:49.186 +05:30 [INF] Content root path: D:\.NetProject\code_nudge\code_Nudge\BackEnd\codeN\CodeNudge\CodeNudge_backend
+2025-09-29 21:19:53.455 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5188/swagger/index.html - null null
+2025-09-29 21:19:54.245 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5188/swagger/index.html - 200 null text/html;charset=utf-8 805.8502ms
+2025-09-29 21:19:54.298 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5188/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-29 21:19:54.302 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5188/_vs/browserLink - null null
+2025-09-29 21:19:54.314 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5188/_framework/aspnetcore-browser-refresh.js - 200 13770 application/javascript; charset=utf-8 16.3578ms
+2025-09-29 21:19:54.783 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5188/_vs/browserLink - 200 null text/javascript; charset=UTF-8 481.5404ms
+2025-09-29 21:19:54.899 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:5188/swagger/v1/swagger.json - null null
+2025-09-29 21:19:55.104 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:5188/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 204.5421ms
+2025-09-29 21:21:16.360 +05:30 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5188/api/Auth/login - null null
+2025-09-29 21:21:16.447 +05:30 [WRN] Failed to determine the https port for redirect.
+2025-09-29 21:21:16.470 +05:30 [INF] CORS policy execution successful.
+2025-09-29 21:21:16.481 +05:30 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5188/api/Auth/login - 204 null null 127.8096ms
+2025-09-29 21:21:16.519 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:5188/api/Auth/login - application/json 61
+2025-09-29 21:21:16.547 +05:30 [INF] CORS policy execution successful.
+2025-09-29 21:21:17.087 +05:30 [INF] Executing endpoint 'CodeNudge.Presentation.Controllers.AuthController.Login (CodeNudge)'
+2025-09-29 21:21:17.215 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(CodeNudge.Shared.Requests.Auth.LoginRequest) on controller CodeNudge.Presentation.Controllers.AuthController (CodeNudge).
+2025-09-29 21:21:33.394 +05:30 [WRN] The 'InterviewStatus' property 'Status' on entity type 'InterviewSession' is configured with a database-generated default, but has no configured sentinel value. The database-generated default will always be used for inserts when the property has the value '0', since this is the CLR default for the 'InterviewStatus' type. Consider using a nullable type, using a nullable backing field, or setting the sentinel value for the property to ensure the database default is used when, and only when, appropriate. See https://aka.ms/efcore-docs-default-values for more information.
+2025-09-29 21:21:33.403 +05:30 [WRN] The 'SubmissionStatus' property 'Status' on entity type 'Submission' is configured with a database-generated default, but has no configured sentinel value. The database-generated default will always be used for inserts when the property has the value '0', since this is the CLR default for the 'SubmissionStatus' type. Consider using a nullable type, using a nullable backing field, or setting the sentinel value for the property to ensure the database default is used when, and only when, appropriate. See https://aka.ms/efcore-docs-default-values for more information.
+2025-09-29 21:21:33.408 +05:30 [WRN] The 'UserRole' property 'Role' on entity type 'User' is configured with a database-generated default, but has no configured sentinel value. The database-generated default will always be used for inserts when the property has the value '0', since this is the CLR default for the 'UserRole' type. Consider using a nullable type, using a nullable backing field, or setting the sentinel value for the property to ensure the database default is used when, and only when, appropriate. See https://aka.ms/efcore-docs-default-values for more information.
+2025-09-29 21:21:39.378 +05:30 [INF] Executed DbCommand (293ms) [Parameters=[@__ToLower_0='?' (Size = 255)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[AccessFailedCount], [u].[Branch], [u].[College], [u].[ConcurrencyStamp], [u].[CreatedAt], [u].[CreatedBy], [u].[DeletedAt], [u].[DeletedBy], [u].[Email], [u].[EmailConfirmed], [u].[EmployeeId], [u].[FirstName], [u].[GraduationYear], [u].[IsActive], [u].[IsDeleted], [u].[IsEmailVerified], [u].[LastLoginAt], [u].[LastName], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[ProfilePicture], [u].[RegisterId], [u].[Role], [u].[SecurityStamp], [u].[TwoFactorEnabled], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserName]
+FROM [Users] AS [u]
+WHERE LOWER([u].[Email]) = @__ToLower_0
+2025-09-29 21:21:52.514 +05:30 [INF] Executing BadRequestObjectResult, writing value of type 'CodeNudge.Shared.Models.ApiResponse`1[[CodeNudge.Shared.Responses.Auth.AuthResponse, CodeNudge, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-09-29 21:21:52.573 +05:30 [INF] Executed action CodeNudge.Presentation.Controllers.AuthController.Login (CodeNudge) in 35343.4303ms
+2025-09-29 21:21:52.580 +05:30 [INF] Executed endpoint 'CodeNudge.Presentation.Controllers.AuthController.Login (CodeNudge)'
+2025-09-29 21:21:52.597 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:5188/api/Auth/login - 400 null application/json; charset=utf-8 36077.8355ms

@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CodeNudge</name>
+    </assembly>
+    <members>
+        <member name="T:CodeNudge.Migrations.InitialCreate">
+            <inheritdoc />
+        </member>
+        <member name="M:CodeNudge.Migrations.InitialCreate.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:CodeNudge.Migrations.InitialCreate.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:CodeNudge.Migrations.InitialCreate.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:CodeNudge.Migrations.UpdateUserToIdentityUser">
+            <inheritdoc />
+        </member>
+        <member name="M:CodeNudge.Migrations.UpdateUserToIdentityUser.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:CodeNudge.Migrations.UpdateUserToIdentityUser.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:CodeNudge.Migrations.UpdateUserToIdentityUser.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:CodeNudge.Presentation.Controllers.AIController.EvaluateCode(CodeNudge.Shared.Requests.AI.CodeEvaluationRequest)">
+            <summary>
+            Evaluate code submission using AI
+            </summary>
+        </member>
+        <member name="M:CodeNudge.Presentation.Controllers.AIController.GetCodeFeedback(CodeNudge.Shared.Requests.AI.CodeFeedbackRequest)">
+            <summary>
+            Get AI feedback for code improvement
+            </summary>
+        </member>
+        <member name="M:CodeNudge.Presentation.Controllers.AIController.GetOptimizationSuggestions(CodeNudge.Shared.Requests.AI.CodeOptimizationRequest)">
+            <summary>
+            Get optimization suggestions for code
+            </summary>
+        </member>
+        <member name="M:CodeNudge.Presentation.Controllers.AIController.AnalyzeComplexity(CodeNudge.Shared.Requests.AI.CodeComplexityRequest)">
+            <summary>
+            Analyze code complexity
+            </summary>
+        </member>
+        <member name="M:CodeNudge.Presentation.Controllers.AIController.GenerateTestCases(CodeNudge.Shared.Requests.AI.TestCaseGenerationRequest)">
+            <summary>
+            Generate test cases for code
+            </summary>
+        </member>
+        <member name="M:CodeNudge.Presentation.Controllers.AIController.CheckPlagiarism(CodeNudge.Shared.Requests.AI.PlagiarismCheckRequest)">
+            <summary>
+            Check code for plagiarism
+            </summary>
+        </member>
+        <member name="M:CodeNudge.Presentation.Controllers.AIController.ExplainCode(CodeNudge.Shared.Requests.AI.CodeExplanationRequest)">
+            <summary>
+            Explain code functionality
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,343 @@
+# CodeNudge - Comprehensive Project Summary
+
+## 1. Project Overview
+
+**CodeNudge** is a comprehensive coding interview preparation and practice platform built with ASP.NET Core 8.0. The platform serves as a complete solution for:
+
+- **Coding Practice**: Users can solve coding problems with multiple difficulty levels and categories
+- **Interview Preparation**: Mock interview sessions with real-time collaboration features
+- **HR Question Bank**: Collection of behavioral and HR interview questions
+- **Code Execution**: Real-time code compilation and testing using Judge0 API
+- **Progress Tracking**: User progress monitoring with leaderboards and statistics
+- **Interview Experiences**: Community-driven interview experience sharing
+- **Weekly Challenges**: Competitive programming challenges with leaderboards
+
+**Target Users**: Computer science students, software developers preparing for technical interviews, and educational institutions.
+
+## 2. Architecture & Design Patterns
+
+**Architecture**: Clean Architecture with CQRS (Command Query Responsibility Segregation) pattern
+
+**Layer Structure**:
+- **Core/Domain**: Contains entities, enums, and domain logic
+- **Core/Application**: Contains CQRS commands, queries, handlers, DTOs, and interfaces
+- **Infrastructure**: Contains data access, external services, and infrastructure concerns
+- **Presentation**: Contains controllers, SignalR hubs, and middleware
+
+**Design Patterns Implemented**:
+- **Repository Pattern**: Data access abstraction with Unit of Work
+- **CQRS with MediatR**: Separation of read and write operations
+- **Dependency Injection**: Comprehensive DI container usage
+- **Factory Pattern**: For service creation and configuration
+- **Strategy Pattern**: For different code execution languages
+- **Observer Pattern**: SignalR for real-time notifications
+
+## 3. Technology Stack
+
+**Framework & Runtime**:
+- .NET 8.0
+- ASP.NET Core Web API
+- Entity Framework Core 8.0
+- SQL Server Database
+
+**Key NuGet Packages**:
+- **Authentication**: Microsoft.AspNetCore.Authentication.JwtBearer, Microsoft.AspNetCore.Identity.EntityFrameworkCore
+- **CQRS**: MediatR (12.2.0)
+- **Validation**: FluentValidation (11.8.1)
+- **Logging**: Serilog.AspNetCore (8.0.0)
+- **Real-time Communication**: SignalR
+- **Password Hashing**: BCrypt.Net-Next (4.0.3)
+- **Object Mapping**: AutoMapper (12.0.1)
+- **Email Services**: MailKit (4.7.1), MimeKit (4.7.1)
+- **Rate Limiting**: AspNetCoreRateLimit (5.0.0)
+- **Background Jobs**: Hangfire.SqlServer (1.8.6)
+- **API Documentation**: Swashbuckle.AspNetCore (6.6.2)
+
+**External Integrations**:
+- **Judge0 API**: For code execution and testing
+- **SMTP Services**: For email notifications
+
+## 4. Folder & File Structure
+
+```
+CodeNudge/
+├── Core/
+│   ├── Application/
+│   │   ├── Behaviors/          # MediatR pipeline behaviors
+│   │   ├── Commands/           # CQRS command definitions
+│   │   ├── DTOs/              # Data Transfer Objects
+│   │   ├── Handlers/          # Command and Query handlers
+│   │   ├── Interfaces/        # Service and repository interfaces
+│   │   ├── Queries/           # CQRS query definitions
+│   │   └── Validators/        # FluentValidation validators
+│   └── Domain/
+│       ├── Common/            # Base entities and common classes
+│       ├── Entities/          # Domain entities
+│       └── Enums/             # Domain enumerations
+├── Infrastructure/
+│   ├── Data/
+│   │   ├── Configurations/    # EF Core entity configurations
+│   │   ├── Context/           # Database context
+│   │   ├── Repositories/      # Repository implementations
+│   │   └── DbInitializer.cs   # Database seeding
+│   ├── External/              # External service integrations
+│   └── Services/              # Infrastructure services
+├── Presentation/
+│   ├── Controllers/           # API controllers
+│   ├── Hubs/                  # SignalR hubs
+│   └── Middleware/            # Custom middleware
+├── Shared/
+│   ├── Models/                # Shared models and responses
+│   ├── Requests/              # Request DTOs
+│   └── Responses/             # Response DTOs
+├── Properties/
+│   └── launchSettings.json    # Launch configuration
+├── Program.cs                 # Application entry point
+├── appsettings.json          # Configuration settings
+└── CodeNudge.csproj          # Project file
+```
+
+**Key Files**:
+- **Program.cs**: Application configuration, DI setup, middleware pipeline
+- **appsettings.json**: Configuration for database, JWT, Judge0, email, CORS, rate limiting
+- **CodeNudgeDbContext.cs**: EF Core database context with entity configurations
+- **DbInitializer.cs**: Database seeding with initial admin user and sample data
+
+## 5. Key Features & Modules
+
+### Authentication & Authorization
+- **JWT-based authentication** with refresh tokens
+- **Role-based authorization** (Student, Admin)
+- **User registration and login** with email verification
+- **Password reset functionality**
+
+### Question Management
+- **Multiple question types**: Coding, Multiple Choice, HR, System Design, Behavioral
+- **Difficulty levels**: Easy, Medium, Hard
+- **Categories**: Array, String, Dynamic Programming, Tree, Graph, etc.
+- **Company-specific questions**: Google, Microsoft, Amazon, etc.
+- **Test case management** with hidden and visible test cases
+
+### Code Execution Engine
+- **Multi-language support**: C#, Java, Python, JavaScript, C++, C, Go, Rust, TypeScript, PHP, Ruby, Swift, Kotlin
+- **Judge0 API integration** for secure code execution
+- **Real-time compilation and testing**
+- **Memory and time limit enforcement**
+- **Detailed execution results** with test case feedback
+
+### Interview System
+- **Mock interview sessions** with room-based collaboration
+- **Real-time code sharing** via SignalR
+- **Interview scheduling and management**
+- **Host and participant roles**
+- **Interview feedback and rating system**
+
+### Progress Tracking
+- **User progress monitoring** per question and category
+- **Leaderboard system** with ranking
+- **Statistics dashboard** with performance metrics
+- **Weekly challenges** with competitive elements
+
+### Community Features
+- **Interview experience sharing** with approval system
+- **Like and rating system** for experiences
+- **HR question bank** with tips and expected answers
+- **Community-driven content**
+
+## 6. Database & Data Flow
+
+**Database Schema**:
+- **Users**: User profiles with authentication data
+- **Questions**: Coding and non-coding questions with metadata
+- **TestCases**: Input/output test cases for coding questions
+- **Submissions**: User code submissions with execution results
+- **TestCaseResults**: Individual test case execution results
+- **InterviewSessions**: Mock interview session data
+- **InterviewQuestions**: Questions used in specific interviews
+- **UserProgress**: User progress tracking per question
+- **InterviewExperiences**: Community interview experiences
+- **LeaderboardEntries**: Ranking and scoring data
+- **WeeklyChallenges**: Challenge events and participation
+- **Notifications**: Real-time notification system
+
+**Entity Relationships**:
+- **One-to-Many**: User → Submissions, Question → TestCases, Submission → TestCaseResults
+- **Many-to-Many**: Users ↔ WeeklyChallenges (via ChallengeParticipants)
+- **Self-referencing**: InterviewSession (Host/Participant Users)
+
+**Data Flow**:
+1. **Authentication**: JWT token generation → User claims → Authorization
+2. **Question Solving**: Question retrieval → Code submission → Judge0 execution → Result storage
+3. **Interview Flow**: Session creation → Room joining → Real-time collaboration → Result recording
+4. **Progress Tracking**: Submission results → Progress calculation → Leaderboard updates
+
+## 7. API Details
+
+**Base URL**: `https://localhost:7188` (Development)
+
+**Authentication**: Bearer JWT tokens in Authorization header
+
+**Key Endpoint Categories**:
+
+### Authentication Endpoints
+- `POST /api/Auth/register` - User registration
+- `POST /api/Auth/login` - User login
+- `POST /api/Auth/refresh-token` - Token refresh
+- `POST /api/Auth/forgot-password` - Password reset request
+- `POST /api/Auth/reset-password` - Password reset confirmation
+
+### Question Management
+- `GET /api/Questions` - Get questions with filtering and pagination
+- `GET /api/Questions/{id}` - Get specific question details
+- `POST /api/Questions` - Create new question (Admin only)
+- `GET /api/Questions/categories` - Get available categories
+- `GET /api/Questions/companies` - Get available companies
+
+### Code Execution
+- `POST /api/Submissions/run` - Run code with sample test cases
+- `POST /api/Submissions/submit` - Submit code for evaluation
+- `GET /api/Submissions/{id}` - Get submission details
+- `GET /api/Submissions/user/{userId}` - Get user submissions
+
+### Interview System
+- `GET /api/Interviews` - Get user interviews
+- `POST /api/Interviews` - Create interview session
+- `POST /api/Interviews/{id}/start` - Start interview
+- `POST /api/Interviews/join-by-code` - Join interview by room code
+
+### Dashboard & Analytics
+- `GET /api/Dashboard` - User dashboard data
+- `GET /api/Dashboard/leaderboard` - Leaderboard rankings
+- `GET /api/Admin/dashboard` - Admin dashboard (Admin only)
+- `GET /api/Admin/analytics` - System analytics (Admin only)
+
+**Response Format**: Standardized ApiResponse wrapper with success/failure status, data, and error messages
+
+## 8. Business Logic & Notable Implementations
+
+### CQRS Implementation
+- **Commands**: Create, Update, Delete operations
+- **Queries**: Read operations with complex filtering
+- **Handlers**: Separate handlers for each command/query
+- **MediatR Pipeline**: Centralized request/response handling
+
+### Real-time Features (SignalR)
+- **InterviewHub**: Real-time interview collaboration
+  - Room management with join/leave functionality
+  - Code sharing between participants
+  - Chat messaging during interviews
+  - Interview state synchronization
+- **NotificationHub**: Real-time notifications
+  - User-specific notification delivery
+  - Role-based group notifications
+  - Notification read status tracking
+
+### Code Execution Pipeline
+1. **Code Submission**: Receive user code and language
+2. **Judge0 Integration**: Submit to external execution service
+3. **Test Case Execution**: Run against multiple test cases
+4. **Result Processing**: Parse execution results and errors
+5. **Progress Update**: Update user progress and statistics
+6. **Notification**: Real-time result notification via SignalR
+
+### Security Implementations
+- **JWT Authentication**: Secure token-based authentication
+- **Role-based Authorization**: Admin and Student role separation
+- **Password Hashing**: BCrypt for secure password storage
+- **Rate Limiting**: API rate limiting to prevent abuse
+- **CORS Configuration**: Cross-origin request handling
+- **Global Exception Handling**: Centralized error handling middleware
+
+### Background Services
+- **Database Initialization**: Automatic migration and seeding
+- **Notification Processing**: Asynchronous notification delivery
+- **Leaderboard Updates**: Periodic ranking calculations
+- **Challenge Management**: Weekly challenge lifecycle management
+
+## 9. Build & Deployment
+
+### Development Setup
+```bash
+# Clone repository
+git clone <repository-url>
+cd CodeNudge
+
+# Restore packages
+dotnet restore
+
+# Update database
+dotnet ef database update
+
+# Run application
+dotnet run
+```
+
+### Configuration Requirements
+1. **Database**: SQL Server connection string in appsettings.json
+2. **Judge0 API**: RapidAPI key for code execution service
+3. **Email Service**: SMTP configuration for notifications
+4. **JWT Settings**: Secret key and token configuration
+
+### Build Commands
+```bash
+# Build project
+dotnet build
+
+# Run tests (if available)
+dotnet test
+
+# Publish for deployment
+dotnet publish -c Release -o ./publish
+```
+
+### Deployment Considerations
+- **Environment Variables**: Separate configurations for Development/Production
+- **Database Migrations**: Automatic migration on startup
+- **Logging**: Serilog with file and console outputs
+- **Health Checks**: Built-in health monitoring endpoints
+- **Docker Support**: Ready for containerization
+
+### Launch Profiles
+- **HTTP**: http://localhost:5231
+- **HTTPS**: https://localhost:7188
+- **Swagger UI**: Available at /swagger endpoint
+
+## 10. Recommendations & Improvements
+
+### Code Quality Improvements
+1. **Unit Testing**: Implement comprehensive unit tests for handlers and services
+2. **Integration Testing**: Add API endpoint testing
+3. **Code Coverage**: Achieve minimum 80% code coverage
+4. **Static Analysis**: Integrate SonarQube or similar tools
+
+### Performance Optimizations
+1. **Caching Strategy**: Implement Redis caching for frequently accessed data
+2. **Database Optimization**: Add database indexes for query performance
+3. **Async Operations**: Ensure all I/O operations are asynchronous
+4. **Connection Pooling**: Optimize database connection management
+
+### Security Enhancements
+1. **API Versioning**: Implement proper API versioning strategy
+2. **Input Validation**: Strengthen input validation and sanitization
+3. **Audit Logging**: Add comprehensive audit trail
+4. **Security Headers**: Implement security headers middleware
+
+### Scalability Improvements
+1. **Microservices**: Consider breaking into smaller services
+2. **Message Queuing**: Implement message queues for background processing
+3. **Load Balancing**: Prepare for horizontal scaling
+4. **CDN Integration**: For static content delivery
+
+### Feature Enhancements
+1. **Mobile API**: Optimize APIs for mobile applications
+2. **Advanced Analytics**: Implement detailed user behavior analytics
+3. **AI Integration**: Add AI-powered question recommendations
+4. **Social Features**: Expand community features and gamification
+
+### DevOps Improvements
+1. **CI/CD Pipeline**: Implement automated deployment pipeline
+2. **Monitoring**: Add application performance monitoring (APM)
+3. **Logging Aggregation**: Centralized logging with ELK stack
+4. **Infrastructure as Code**: Use Terraform or ARM templates
+
+The CodeNudge platform represents a well-architected, feature-rich coding interview preparation system with strong foundations for future growth and scalability.
