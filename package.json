@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@angular/common": "^20.3.2",
+    "@angular/forms": "^20.3.2",
+    "@angular/router": "^20.3.2",
+    "bootstrap": "^5.3.7",
+    "ngx-toastr": "^19.1.0"
+  }
+}
