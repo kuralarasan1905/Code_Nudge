@@ -1,0 +1,293 @@
+<div class="profile-container">
+  <!-- Loading State -->
+  @if (isLoading()) {
+    <div class="d-flex justify-content-center align-items-center" style="min-height: 400px;">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  } @else {
+    <!-- Profile Header -->
+    <div class="profile-header bg-white rounded-3 shadow-sm p-4 mb-4">
+      <div class="row align-items-center">
+        <div class="col-auto">
+          <img [src]="profile()?.avatar" [alt]="profile()?.firstName + ' ' + profile()?.lastName" 
+               class="profile-avatar rounded-circle" width="100" height="100">
+        </div>
+        <div class="col">
+          @if (!isEditing()) {
+            <h2 class="mb-1">{{ profile()?.firstName }} {{ profile()?.lastName }}</h2>
+            <p class="text-muted mb-2">{{ '@' + profile()?.username }}</p>
+            <p class="mb-2">{{ profile()?.bio }}</p>
+            <div class="d-flex gap-3 text-muted small">
+              @if (profile()?.location) {
+                <span><i class="bi bi-geo-alt"></i> {{ profile()?.location }}</span>
+              }
+              <span><i class="bi bi-calendar"></i> Joined {{ profile()?.joinedDate | date:'MMM yyyy' }}</span>
+              <span><i class="bi bi-clock"></i> Last active {{ profile()?.lastActive | date:'short' }}</span>
+            </div>
+          } @else {
+            <!-- Edit Form -->
+            <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label">First Name</label>
+                  <input type="text" class="form-control" formControlName="firstName">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Last Name</label>
+                  <input type="text" class="form-control" formControlName="lastName">
+                </div>
+                <div class="col-12">
+                  <label class="form-label">Bio</label>
+                  <textarea class="form-control" rows="3" formControlName="bio"></textarea>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Location</label>
+                  <input type="text" class="form-control" formControlName="location">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Website</label>
+                  <input type="url" class="form-control" formControlName="website">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">GitHub Username</label>
+                  <input type="text" class="form-control" formControlName="github">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">LinkedIn Username</label>
+                  <input type="text" class="form-control" formControlName="linkedin">
+                </div>
+              </div>
+            </form>
+          }
+        </div>
+        <div class="col-auto">
+          @if (!isEditing()) {
+            <button class="btn btn-outline-primary" (click)="toggleEdit()">
+              <i class="bi bi-pencil"></i> Edit Profile
+            </button>
+          } @else {
+            <div class="d-flex gap-2">
+              <button class="btn btn-success" (click)="saveProfile()" [disabled]="profileForm.invalid">
+                <i class="bi bi-check"></i> Save
+              </button>
+              <button class="btn btn-outline-secondary" (click)="cancelEdit()">
+                <i class="bi bi-x"></i> Cancel
+              </button>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Profile Stats -->
+    <div class="row g-4 mb-4">
+      <div class="col-md-3">
+        <div class="stat-card bg-white rounded-3 shadow-sm p-3 text-center">
+          <div class="stat-number text-primary">{{ getTotalInterviews() }}</div>
+          <div class="stat-label text-muted">Total Interviews</div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stat-card bg-white rounded-3 shadow-sm p-3 text-center">
+          <div class="stat-number text-success">{{ getCompletedInterviews() }}</div>
+          <div class="stat-label text-muted">Completed</div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stat-card bg-white rounded-3 shadow-sm p-3 text-center">
+          <div class="stat-number text-warning">{{ calculateAverageScore() }}%</div>
+          <div class="stat-label text-muted">Average Score</div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stat-card bg-white rounded-3 shadow-sm p-3 text-center">
+          <div class="stat-number text-info">{{ achievements().length }}</div>
+          <div class="stat-label text-muted">Achievements</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="profile-tabs bg-white rounded-3 shadow-sm">
+      <ul class="nav nav-tabs border-0 px-4 pt-3">
+        <li class="nav-item">
+          <button class="nav-link" [class.active]="activeTab() === 'overview'" (click)="setActiveTab('overview')">
+            <i class="bi bi-person"></i> Overview
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" [class.active]="activeTab() === 'skills'" (click)="setActiveTab('skills')">
+            <i class="bi bi-code-slash"></i> Skills
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" [class.active]="activeTab() === 'achievements'" (click)="setActiveTab('achievements')">
+            <i class="bi bi-trophy"></i> Achievements
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" [class.active]="activeTab() === 'history'" (click)="setActiveTab('history')">
+            <i class="bi bi-clock-history"></i> Interview History
+          </button>
+        </li>
+      </ul>
+
+      <!-- Tab Content -->
+      <div class="tab-content p-4">
+        <!-- Overview Tab -->
+        @if (activeTab() === 'overview') {
+          <div class="row g-4">
+            <div class="col-md-8">
+              <h5 class="mb-3">About</h5>
+              <p>{{ profile()?.bio }}</p>
+              
+              <h5 class="mb-3 mt-4">Contact Information</h5>
+              <div class="contact-info">
+                @if (profile()?.email) {
+                  <div class="contact-item mb-2">
+                    <i class="bi bi-envelope text-muted me-2"></i>
+                    <a [href]="'mailto:' + profile()?.email">{{ profile()?.email }}</a>
+                  </div>
+                }
+                @if (profile()?.website) {
+                  <div class="contact-item mb-2">
+                    <i class="bi bi-globe text-muted me-2"></i>
+                    <a [href]="profile()?.website" target="_blank">{{ profile()?.website }}</a>
+                  </div>
+                }
+                @if (profile()?.github) {
+                  <div class="contact-item mb-2">
+                    <i class="bi bi-github text-muted me-2"></i>
+                    <a [href]="'https://github.com/' + profile()?.github" target="_blank">{{ profile()?.github }}</a>
+                  </div>
+                }
+                @if (profile()?.linkedin) {
+                  <div class="contact-item mb-2">
+                    <i class="bi bi-linkedin text-muted me-2"></i>
+                    <a [href]="'https://linkedin.com/in/' + profile()?.linkedin" target="_blank">{{ profile()?.linkedin }}</a>
+                  </div>
+                }
+              </div>
+            </div>
+            <div class="col-md-4">
+              <h5 class="mb-3">Recent Achievements</h5>
+              @for (achievement of achievements().slice(0, 3); track achievement.id) {
+                <div class="achievement-card border rounded-3 p-3 mb-3" [class]="getRarityClass(achievement.rarity)">
+                  <div class="d-flex align-items-center">
+                    <div class="achievement-icon me-3">{{ achievement.icon }}</div>
+                    <div class="flex-grow-1">
+                      <h6 class="mb-1">{{ achievement.title }}</h6>
+                      <p class="text-muted small mb-1">{{ achievement.description }}</p>
+                      <span [class]="getRarityBadgeClass(achievement.rarity)">{{ achievement.rarity | titlecase }}</span>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- Skills Tab -->
+        @if (activeTab() === 'skills') {
+          <div class="skills-section">
+            @for (category of getSkillsByCategory() | keyvalue; track category.key) {
+              <div class="skill-category mb-4">
+                <h5 class="mb-3">{{ category.key }}</h5>
+                <div class="row g-3">
+                  @for (skill of category.value; track skill.name) {
+                    <div class="col-md-6">
+                      <div class="skill-item d-flex justify-content-between align-items-center p-3 border rounded-3">
+                        <span class="skill-name">{{ skill.name }}</span>
+                        <div class="skill-level">
+                          <span class="badge" [class]="getSkillLevelClass(skill.level)">
+                            {{ getSkillLevelText(skill.level) }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        }
+
+        <!-- Achievements Tab -->
+        @if (activeTab() === 'achievements') {
+          <div class="achievements-grid">
+            <div class="row g-4">
+              @for (achievement of achievements(); track achievement.id) {
+                <div class="col-md-6 col-lg-4">
+                  <div class="achievement-card border rounded-3 p-4 h-100" [class]="getRarityClass(achievement.rarity)">
+                    <div class="text-center">
+                      <div class="achievement-icon-large mb-3">{{ achievement.icon }}</div>
+                      <h5 class="mb-2">{{ achievement.title }}</h5>
+                      <p class="text-muted mb-3">{{ achievement.description }}</p>
+                      <div class="d-flex justify-content-between align-items-center">
+                        <span [class]="getRarityBadgeClass(achievement.rarity)">{{ achievement.rarity | titlecase }}</span>
+                        <small class="text-muted">{{ achievement.unlockedAt | date:'MMM d, y' }}</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- Interview History Tab -->
+        @if (activeTab() === 'history') {
+          <div class="interview-history">
+            @if (interviewHistory().length === 0) {
+              <div class="text-center py-5">
+                <i class="bi bi-clock-history display-1 text-muted"></i>
+                <h5 class="mt-3 text-muted">No interview history yet</h5>
+                <p class="text-muted">Start practicing to see your interview history here.</p>
+              </div>
+            } @else {
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>Interview</th>
+                      <th>Type</th>
+                      <th>Score</th>
+                      <th>Duration</th>
+                      <th>Status</th>
+                      <th>Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (interview of interviewHistory(); track interview.id) {
+                      <tr>
+                        <td>
+                          <strong>{{ interview.title }}</strong>
+                        </td>
+                        <td>
+                          <span class="badge bg-light text-dark">{{ interview.type }}</span>
+                        </td>
+                        <td>
+                          <span class="fw-bold">{{ interview.score }}%</span>
+                        </td>
+                        <td>{{ formatDuration(interview.duration) }}</td>
+                        <td>
+                          <i [class]="'bi ' + getStatusIcon(interview.status) + ' ' + getStatusClass(interview.status)"></i>
+                          <span [class]="getStatusClass(interview.status)" class="ms-1">
+                            {{ interview.status | titlecase }}
+                          </span>
+                        </td>
+                        <td>{{ interview.completedAt | date:'MMM d, y' }}</td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

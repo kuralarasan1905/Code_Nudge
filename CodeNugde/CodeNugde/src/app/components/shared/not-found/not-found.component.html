@@ -1,0 +1,67 @@
+<!-- 404 Not Found Page -->
+<div class="not-found-container">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-6 col-md-8 text-center">
+        <div class="not-found-content">
+          <!-- 404 Illustration -->
+          <div class="error-code">
+            <h1 class="display-1 fw-bold text-primary">404</h1>
+          </div>
+          
+          <!-- Error Message -->
+          <div class="error-message mb-4">
+            <h2 class="h3 mb-3">Page Not Found</h2>
+            <p class="text-muted mb-4">
+              Sorry, the page you are looking for doesn't exist or has been moved.
+              Please check the URL or navigate back to a safe page.
+            </p>
+          </div>
+          
+          <!-- Action Buttons -->
+          <div class="error-actions">
+            <button class="btn btn-primary me-3" (click)="goBack()">
+              <i class="bi bi-arrow-left me-2"></i>
+              Go Back
+            </button>
+            <a routerLink="/student/dashboard" class="btn btn-outline-primary">
+              <i class="bi bi-house me-2"></i>
+              Home
+            </a>
+          </div>
+          
+          <!-- Additional Links -->
+          <div class="additional-links mt-5">
+            <p class="text-muted mb-3">You might be looking for:</p>
+            <div class="row g-2">
+              <div class="col-md-6">
+                <a routerLink="/student/dashboard" class="link-card">
+                  <i class="bi bi-speedometer2"></i>
+                  <span>Dashboard</span>
+                </a>
+              </div>
+              <div class="col-md-6">
+                <a routerLink="/student/interviews" class="link-card">
+                  <i class="bi bi-clipboard-data"></i>
+                  <span>Interviews</span>
+                </a>
+              </div>
+              <div class="col-md-6">
+                <a routerLink="/auth/login" class="link-card">
+                  <i class="bi bi-box-arrow-in-right"></i>
+                  <span>Login</span>
+                </a>
+              </div>
+              <div class="col-md-6">
+                <a routerLink="/admin/dashboard" class="link-card">
+                  <i class="bi bi-gear"></i>
+                  <span>Admin Panel</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,314 @@
+/* Admin Dashboard Styles */
+.admin-dashboard {
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  padding: 2rem 0;
+}
+
+/* Metric Cards */
+.metric-card {
+  border: none;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+.metric-card:hover {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.metric-icon {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+}
+
+.metric-card .card-title {
+  color: #6c757d;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.metric-card h3 {
+  font-weight: 700;
+  color: #212529;
+}
+
+/* Chart Container */
+.chart-container {
+  position: relative;
+  height: 300px;
+  width: 100%;
+}
+
+/* Activity Rate Circle */
+.activity-rate-circle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 0;
+}
+
+.progress-circle {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: conic-gradient(
+    #0d6efd 0deg,
+    #0d6efd calc(var(--progress) * 3.6deg),
+    #e9ecef calc(var(--progress) * 3.6deg),
+    #e9ecef 360deg
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.progress-circle::before {
+  content: '';
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: white;
+}
+
+.progress-text {
+  position: relative;
+  z-index: 1;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0d6efd;
+}
+
+/* Category and Difficulty Items */
+.category-item,
+.difficulty-item {
+  padding: 0.75rem;
+  background: #f8f9fa;
+  border-radius: 0.375rem;
+  border-left: 4px solid #0d6efd;
+}
+
+.category-item:last-child,
+.difficulty-item:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* Engagement Metrics */
+.engagement-metric {
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 0.5rem;
+  border: 1px solid #dee2e6;
+  height: 100%;
+  transition: all 0.3s ease;
+}
+
+.engagement-metric:hover {
+  background: #e9ecef;
+  border-color: #0d6efd;
+}
+
+.engagement-metric .metric-value {
+  margin-top: 0.5rem;
+}
+
+/* Quick Action Buttons */
+.btn-outline-primary:hover,
+.btn-outline-success:hover,
+.btn-outline-info:hover,
+.btn-outline-warning:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+/* Card Enhancements */
+.card {
+  border: none;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  background: white;
+  border-bottom: 1px solid #dee2e6;
+  padding: 1rem 1.5rem;
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+/* Progress Bars */
+.progress {
+  background-color: #e9ecef;
+  border-radius: 0.25rem;
+}
+
+.progress-bar {
+  background-color: #0d6efd;
+  transition: width 0.6s ease;
+}
+
+/* Badges */
+.badge {
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* Text Colors */
+.text-success {
+  color: #198754 !important;
+}
+
+.text-danger {
+  color: #dc3545 !important;
+}
+
+.text-warning {
+  color: #fd7e14 !important;
+}
+
+/* Responsive Design */
+@media (max-width: 1199.98px) {
+  .admin-dashboard {
+    padding: 1rem 0;
+  }
+  
+  .metric-card .card-body {
+    padding: 1rem;
+  }
+  
+  .chart-container {
+    height: 250px;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .progress-circle {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .progress-circle::before {
+    width: 75px;
+    height: 75px;
+  }
+  
+  .progress-text {
+    font-size: 1.25rem;
+  }
+  
+  .engagement-metric {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .admin-dashboard .container-fluid {
+    padding: 0 1rem;
+  }
+  
+  .metric-card .card-body {
+    padding: 0.75rem;
+  }
+  
+  .metric-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1rem;
+  }
+  
+  .chart-container {
+    height: 200px;
+  }
+  
+  .card-body {
+    padding: 1rem;
+  }
+  
+  .card-header {
+    padding: 0.75rem 1rem;
+  }
+  
+  .btn-group-sm .btn {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .admin-dashboard {
+    padding: 0.5rem 0;
+  }
+  
+  .d-flex.justify-content-between {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .d-flex.gap-2 {
+    justify-content: center;
+  }
+  
+  .progress-circle {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .progress-circle::before {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .progress-text {
+    font-size: 1rem;
+  }
+  
+  .category-item,
+  .difficulty-item {
+    padding: 0.5rem;
+  }
+  
+  .engagement-metric {
+    padding: 0.75rem;
+  }
+}
+
+/* Loading and Error States */
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+}
+
+.alert {
+  border: none;
+  border-radius: 0.5rem;
+}
+
+/* Animations */
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+.metric-card { animation: fadeInUp 0.6s ease-out; }
+.metric-card:nth-child(1) { animation-delay: 0.1s; }
+.metric-card:nth-child(2) { animation-delay: 0.2s; }
+.metric-card:nth-child(3) { animation-delay: 0.3s; }
+.metric-card:nth-child(4) { animation-delay: 0.4s; }
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #a8a8a8; }

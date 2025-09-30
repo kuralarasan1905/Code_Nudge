@@ -1,0 +1,259 @@
+<!-- Practice Questions List Container -->
+<div class="container-fluid py-4">
+  <!-- Header Section -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <h1 class="h3 mb-1">Practice Questions</h1>
+          <p class="text-muted mb-0">Improve your coding skills with our curated problem set</p>
+        </div>
+        <div class="d-flex gap-2">
+          <button class="btn btn-outline-primary" (click)="refreshQuestions()">
+            <i class="bi bi-arrow-clockwise me-1"></i>
+            Refresh
+          </button>
+          <button class="btn btn-outline-secondary" (click)="clearFilters()">
+            <i class="bi bi-funnel me-1"></i>
+            Clear Filters
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Progress Stats -->
+  <div class="row mb-4">
+    <div class="col-md-3 mb-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body text-center">
+          <div class="display-6 text-primary mb-2">{{ totalQuestions() }}</div>
+          <h6 class="text-muted mb-0">Total Questions</h6>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body text-center">
+          <div class="display-6 text-success mb-2">{{ solvedQuestions() }}</div>
+          <h6 class="text-muted mb-0">Solved</h6>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body text-center">
+          <div class="display-6 text-info mb-2">{{ progressPercentage() }}%</div>
+          <h6 class="text-muted mb-0">Progress</h6>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body text-center">
+          <div class="display-6 text-warning mb-2">{{ filteredQuestions().length }}</div>
+          <h6 class="text-muted mb-0">Filtered Results</h6>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters Section -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <div class="row g-3">
+            <!-- Search -->
+            <div class="col-md-4">
+              <label class="form-label">Search Questions</label>
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="bi bi-search"></i>
+                </span>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Search by title, description, or tags..."
+                  [value]="searchQuery()"
+                  (input)="onSearchChange($any($event.target).value || '')"
+                />
+              </div>
+            </div>
+
+            <!-- Category Filter -->
+            <div class="col-md-3">
+              <label class="form-label">Category</label>
+              <select
+                class="form-select"
+                [value]="selectedCategory()"
+                (change)="onCategoryChange($any($event.target).value)"
+              >
+                <option value="all">All Categories</option>
+                @for (category of categories; track category) {
+                  <option [value]="category">{{ formatCategory(category) }}</option>
+                }
+              </select>
+            </div>
+
+            <!-- Difficulty Filter -->
+            <div class="col-md-3">
+              <label class="form-label">Difficulty</label>
+              <select
+                class="form-select"
+                [value]="selectedDifficulty()"
+                (change)="onDifficultyChange($any($event.target).value)"
+              >
+                <option value="all">All Difficulties</option>
+                @for (difficulty of difficulties; track difficulty) {
+                  <option [value]="difficulty">{{ difficulty | titlecase }}</option>
+                }
+              </select>
+            </div>
+
+            <!-- Solved Filter -->
+            <div class="col-md-2">
+              <label class="form-label">Status</label>
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="solvedFilter"
+                  [checked]="showSolvedOnly()"
+                  (change)="toggleSolvedFilter()"
+                />
+                <label class="form-check-label" for="solvedFilter">
+                  Solved Only
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  @if (isLoading()) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary mb-3" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="text-muted">Loading practice questions...</p>
+    </div>
+  }
+
+  <!-- Error State -->
+  @else if (error()) {
+    <div class="alert alert-danger" role="alert">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i>
+      {{ error() }}
+      <button class="btn btn-outline-danger btn-sm ms-3" (click)="refreshQuestions()">
+        <i class="bi bi-arrow-clockwise me-1"></i>
+        Retry
+      </button>
+    </div>
+  }
+
+  <!-- Questions List -->
+  @else {
+    @if (filteredQuestions().length === 0) {
+      <div class="text-center py-5">
+        <i class="bi bi-inbox text-muted" style="font-size: 4rem;"></i>
+        <h4 class="text-muted mt-3">No questions found</h4>
+        <p class="text-muted">Try adjusting your filters or search criteria</p>
+        <button class="btn btn-primary" (click)="clearFilters()">
+          Clear All Filters
+        </button>
+      </div>
+    } @else {
+      <div class="row">
+        @for (question of filteredQuestions(); track question.id) {
+          <div class="col-12 mb-3">
+            <div class="card border-0 shadow-sm h-100">
+              <div class="card-body">
+                <div class="row align-items-center">
+                  <!-- Question Info -->
+                  <div class="col-md-8">
+                    <div class="d-flex align-items-start">
+                      <!-- Status Icon -->
+                      <div class="me-3 mt-1">
+                        @if (question.isSolved) {
+                          <i class="bi bi-check-circle-fill text-success fs-5"></i>
+                        } @else {
+                          <i class="bi bi-circle text-muted fs-5"></i>
+                        }
+                      </div>
+                      
+                      <!-- Question Details -->
+                      <div class="flex-grow-1">
+                        <h5 class="mb-2">
+                          <a 
+                            [routerLink]="['/student/practice', question.id]"
+                            class="text-decoration-none"
+                          >
+                            {{ question.title }}
+                          </a>
+                        </h5>
+                        <p class="text-muted mb-2">{{ question.description }}</p>
+                        
+                        <!-- Tags -->
+                        <div class="mb-2">
+                          @for (tag of question.tags; track tag) {
+                            <span class="badge bg-light text-dark me-1">{{ tag }}</span>
+                          }
+                        </div>
+                        
+                        <!-- Category and Stats -->
+                        <div class="d-flex align-items-center gap-3 text-sm">
+                          <span class="text-muted">
+                            <i [class]="getCategoryIcon(question.category)" class="me-1"></i>
+                            {{ formatCategory(question.category) }}
+                          </span>
+                          <span class="text-muted">
+                            <i class="bi bi-people me-1"></i>
+                            {{ question.totalSubmissions }} submissions
+                          </span>
+                          <span class="text-muted">
+                            <i class="bi bi-check-circle me-1"></i>
+                            {{ question.acceptanceRate }}% acceptance
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Actions -->
+                  <div class="col-md-4 text-md-end">
+                    <div class="mb-2">
+                      <span [class]="getDifficultyClass(question.difficulty)">
+                        {{ question.difficulty | titlecase }}
+                      </span>
+                    </div>
+                    <div class="d-flex gap-2 justify-content-md-end">
+                      <a
+                        [routerLink]="['/student/practice', question.id]"
+                        class="btn btn-primary btn-sm"
+                      >
+                        @if (question.isSolved) {
+                          <i class="bi bi-arrow-clockwise me-1"></i>
+                          Solve Again
+                        } @else {
+                          <i class="bi bi-play-circle me-1"></i>
+                          Solve
+                        }
+                      </a>
+                      <button class="btn btn-outline-secondary btn-sm">
+                        <i class="bi bi-bookmark"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  }
+</div>

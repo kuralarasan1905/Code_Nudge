@@ -1,0 +1,302 @@
+<!-- HR Questions Container -->
+<div class="container-fluid h-100 p-0">
+  <!-- Loading State -->
+  @if (isLoading()) {
+    <div class="d-flex justify-content-center align-items-center h-100">
+      <div class="text-center">
+        <div class="spinner-border text-primary mb-3" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="text-muted">Loading HR questions...</p>
+      </div>
+    </div>
+  }
+
+  <!-- Error State -->
+  @else if (error()) {
+    <div class="alert alert-danger m-3" role="alert">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i>
+      {{ error() }}
+    </div>
+  }
+
+  <!-- Practice Mode -->
+  @else if (isPracticeMode()) {
+    <div class="h-100 d-flex flex-column">
+      <!-- Practice Header -->
+      <div class="bg-primary text-white p-3">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h5 class="mb-1">
+              <i class="bi bi-play-circle me-2"></i>
+              Practice Mode
+            </h5>
+            <small>Question {{ currentQuestionIndex() + 1 }} of {{ filteredQuestions().length }}</small>
+          </div>
+          <div class="d-flex align-items-center gap-3">
+            <div class="text-center">
+              <div class="h5 mb-0">{{ formatTime(practiceTimer()) }}</div>
+              <small>Time</small>
+            </div>
+            <button class="btn btn-outline-light btn-sm" (click)="exitPracticeMode()">
+              <i class="bi bi-x-lg me-1"></i>
+              Exit
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Practice Content -->
+      @if (currentPracticeQuestion()) {
+        <div class="flex-grow-1 d-flex flex-column p-4">
+          <!-- Question -->
+          <div class="mb-4">
+            <div class="d-flex align-items-center gap-2 mb-3">
+              <span [class]="getDifficultyClass(currentPracticeQuestion()!.difficulty)">
+                {{ currentPracticeQuestion()!.difficulty | titlecase }}
+              </span>
+              <span class="badge bg-secondary">{{ currentPracticeQuestion()!.category }}</span>
+            </div>
+            <h4 class="mb-3">{{ currentPracticeQuestion()!.question }}</h4>
+          </div>
+
+          <!-- Answer Area -->
+          <div class="flex-grow-1 mb-4">
+            <label class="form-label">Your Answer:</label>
+            <textarea 
+              class="form-control h-100" 
+              placeholder="Type your answer here..."
+              [value]="userAnswer()"
+              (input)="userAnswer.set($any($event.target).value)"
+              style="min-height: 200px; resize: vertical;"
+            ></textarea>
+          </div>
+
+          <!-- Navigation -->
+          <div class="d-flex justify-content-between">
+            <button 
+              class="btn btn-outline-secondary"
+              [disabled]="currentQuestionIndex() === 0"
+              (click)="previousQuestion()"
+            >
+              <i class="bi bi-arrow-left me-1"></i>
+              Previous
+            </button>
+            <button 
+              class="btn btn-primary"
+              [disabled]="currentQuestionIndex() >= filteredQuestions().length - 1"
+              (click)="nextQuestion()"
+            >
+              Next
+              <i class="bi bi-arrow-right ms-1"></i>
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Main Content -->
+  @else {
+    <div class="h-100 d-flex flex-column">
+      <!-- Header -->
+      <div class="bg-light border-bottom p-3">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h4 class="mb-1">
+              <i class="bi bi-person-check me-2"></i>
+              HR Interview Questions
+            </h4>
+            <p class="text-muted mb-0">Practice common HR interview questions</p>
+          </div>
+          <div class="d-flex gap-2">
+            <button class="btn btn-primary" (click)="startPracticeMode()">
+              <i class="bi bi-play-circle me-1"></i>
+              Start Practice
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="bg-white border-bottom p-3">
+        <div class="row g-3">
+          <div class="col-md-3">
+            <div class="text-center">
+              <div class="h4 text-primary mb-1">{{ getTotalQuestions() }}</div>
+              <small class="text-muted">Total Questions</small>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="text-center">
+              <div class="h4 text-success mb-1">{{ getPracticedQuestions() }}</div>
+              <small class="text-muted">Practiced</small>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="text-center">
+              <div class="h4 text-warning mb-1">{{ getBookmarkedQuestions() }}</div>
+              <small class="text-muted">Bookmarked</small>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="text-center">
+              <div class="h4 text-info mb-1">{{ getProgressPercentage() }}%</div>
+              <small class="text-muted">Progress</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="bg-white border-bottom p-3">
+        <div class="row g-3">
+          <!-- Search -->
+          <div class="col-md-4">
+            <div class="input-group">
+              <span class="input-group-text">
+                <i class="bi bi-search"></i>
+              </span>
+              <input 
+                type="text" 
+                class="form-control" 
+                placeholder="Search questions..."
+                [value]="searchQuery()"
+                (input)="onSearchChange($any($event.target).value)"
+              >
+            </div>
+          </div>
+
+          <!-- Category Filter -->
+          <div class="col-md-3">
+            <select 
+              class="form-select"
+              [value]="selectedCategory()"
+              (change)="onCategoryChange($any($event.target).value)"
+            >
+              <option value="all">All Categories</option>
+              @for (category of categories(); track category) {
+                <option [value]="category">{{ category }}</option>
+              }
+            </select>
+          </div>
+
+          <!-- Difficulty Filter -->
+          <div class="col-md-3">
+            <select 
+              class="form-select"
+              [value]="selectedDifficulty()"
+              (change)="onDifficultyChange($any($event.target).value)"
+            >
+              <option value="all">All Difficulties</option>
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="hard">Hard</option>
+            </select>
+          </div>
+
+          <!-- Filter Actions -->
+          <div class="col-md-2">
+            <div class="d-flex gap-2">
+              <button 
+                class="btn btn-sm"
+                [class]="showBookmarkedOnly() ? 'btn-warning' : 'btn-outline-warning'"
+                (click)="toggleBookmarkedFilter()"
+              >
+                <i class="bi bi-bookmark-fill"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-secondary" (click)="clearFilters()">
+                <i class="bi bi-x-circle"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Questions List -->
+      <div class="flex-grow-1 overflow-auto p-3">
+        @if (filteredQuestions().length === 0) {
+          <div class="text-center py-5">
+            <i class="bi bi-inbox text-muted" style="font-size: 3rem;"></i>
+            <h5 class="text-muted mt-3">No questions found</h5>
+            <p class="text-muted">Try adjusting your filters or search terms</p>
+          </div>
+        } @else {
+          <div class="row g-3">
+            @for (question of filteredQuestions(); track question.id) {
+              <div class="col-12">
+                <div class="card shadow-sm">
+                  <div class="card-body">
+                    <!-- Question Header -->
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                      <div class="flex-grow-1">
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                          <span [class]="getDifficultyClass(question.difficulty)">
+                            {{ question.difficulty | titlecase }}
+                          </span>
+                          <span class="badge bg-secondary">{{ question.category }}</span>
+                          @if (question.isPracticed) {
+                            <span class="badge bg-success">
+                              <i class="bi bi-check-circle me-1"></i>
+                              Practiced
+                            </span>
+                          }
+                        </div>
+                        <h5 class="card-title">{{ question.question }}</h5>
+                      </div>
+                      <div class="d-flex gap-2">
+                        <button 
+                          class="btn btn-sm"
+                          [class]="question.isBookmarked ? 'btn-warning' : 'btn-outline-warning'"
+                          (click)="toggleBookmark(question.id)"
+                        >
+                          <i class="bi bi-bookmark-fill"></i>
+                        </button>
+                        @if (!question.isPracticed) {
+                          <button 
+                            class="btn btn-sm btn-outline-success"
+                            (click)="markAsPracticed(question.id)"
+                          >
+                            <i class="bi bi-check-circle me-1"></i>
+                            Mark Practiced
+                          </button>
+                        }
+                      </div>
+                    </div>
+
+                    <!-- Tips -->
+                    <div class="mb-3">
+                      <h6 class="text-muted mb-2">
+                        <i class="bi bi-lightbulb me-1"></i>
+                        Tips:
+                      </h6>
+                      <ul class="list-unstyled mb-0">
+                        @for (tip of question.tips; track tip) {
+                          <li class="mb-1">
+                            <i class="bi bi-arrow-right text-primary me-2"></i>
+                            {{ tip }}
+                          </li>
+                        }
+                      </ul>
+                    </div>
+
+                    <!-- Sample Answer -->
+                    @if (question.sampleAnswer) {
+                      <div class="alert alert-light">
+                        <h6 class="alert-heading">
+                          <i class="bi bi-chat-quote me-1"></i>
+                          Sample Answer:
+                        </h6>
+                        <p class="mb-0">{{ question.sampleAnswer }}</p>
+                      </div>
+                    }
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

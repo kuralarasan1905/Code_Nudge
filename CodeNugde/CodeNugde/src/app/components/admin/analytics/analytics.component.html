@@ -1,0 +1,333 @@
+<!-- Analytics Dashboard -->
+<div class="analytics-dashboard">
+  <div class="container-fluid">
+    <!-- Header -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h1 class="h3 mb-0">Analytics Dashboard</h1>
+            <p class="text-muted mb-0">Detailed insights and performance metrics</p>
+          </div>
+          <div class="d-flex gap-2">
+            <select 
+              class="form-select form-select-sm" 
+              [(ngModel)]="selectedTimeRange"
+              (change)="onTimeRangeChange()"
+              style="width: auto;">
+              @for (option of timeRangeOptions; track option.value) {
+                <option [value]="option.value">{{ option.label }}</option>
+              }
+            </select>
+            <button class="btn btn-outline-primary btn-sm" (click)="exportAnalytics()">
+              <i class="bi bi-download me-2"></i>
+              Export
+            </button>
+            <button class="btn btn-primary btn-sm" (click)="refreshAnalytics()">
+              <i class="bi bi-arrow-clockwise me-2"></i>
+              Refresh
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    @if (isLoading()) {
+      <div class="row">
+        <div class="col-12">
+          <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-3 text-muted">Loading analytics data...</p>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Analytics Content -->
+    @if (!isLoading()) {
+      <!-- Overview Cards -->
+      <div class="row g-3 mb-4">
+        <div class="col-xl-2 col-lg-4 col-md-6">
+          <div class="card metric-card">
+            <div class="card-body text-center">
+              <div class="metric-icon bg-primary">
+                <i class="bi bi-people text-white"></i>
+              </div>
+              <h4 class="mb-1">{{ formatNumber(analyticsData().overview.totalUsers) }}</h4>
+              <small class="text-muted">Total Users</small>
+              <div class="metric-trend text-success mt-1">
+                <i class="bi bi-arrow-up"></i>
+                <small>+12.5%</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-2 col-lg-4 col-md-6">
+          <div class="card metric-card">
+            <div class="card-body text-center">
+              <div class="metric-icon bg-success">
+                <i class="bi bi-person-check text-white"></i>
+              </div>
+              <h4 class="mb-1">{{ formatNumber(analyticsData().overview.activeUsers) }}</h4>
+              <small class="text-muted">Active Users</small>
+              <div class="metric-trend text-success mt-1">
+                <i class="bi bi-arrow-up"></i>
+                <small>+8.3%</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-2 col-lg-4 col-md-6">
+          <div class="card metric-card">
+            <div class="card-body text-center">
+              <div class="metric-icon bg-info">
+                <i class="bi bi-clipboard-data text-white"></i>
+              </div>
+              <h4 class="mb-1">{{ formatNumber(analyticsData().overview.totalInterviews) }}</h4>
+              <small class="text-muted">Total Interviews</small>
+              <div class="metric-trend text-success mt-1">
+                <i class="bi bi-arrow-up"></i>
+                <small>+15.7%</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-2 col-lg-4 col-md-6">
+          <div class="card metric-card">
+            <div class="card-body text-center">
+              <div class="metric-icon bg-warning">
+                <i class="bi bi-check-circle text-white"></i>
+              </div>
+              <h4 class="mb-1">{{ analyticsData().overview.completionRate | number:'1.1-1' }}%</h4>
+              <small class="text-muted">Completion Rate</small>
+              <div class="metric-trend text-success mt-1">
+                <i class="bi bi-arrow-up"></i>
+                <small>+2.1%</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-2 col-lg-4 col-md-6">
+          <div class="card metric-card">
+            <div class="card-body text-center">
+              <div class="metric-icon bg-secondary">
+                <i class="bi bi-graph-up text-white"></i>
+              </div>
+              <h4 class="mb-1">{{ analyticsData().overview.averageScore | number:'1.1-1' }}%</h4>
+              <small class="text-muted">Average Score</small>
+              <div class="metric-trend text-danger mt-1">
+                <i class="bi bi-arrow-down"></i>
+                <small>-1.2%</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-2 col-lg-4 col-md-6">
+          <div class="card metric-card">
+            <div class="card-body text-center">
+              <div class="metric-icon bg-danger">
+                <i class="bi bi-server text-white"></i>
+              </div>
+              <h4 class="mb-1">{{ analyticsData().overview.platformUptime | number:'1.1-1' }}%</h4>
+              <small class="text-muted">Platform Uptime</small>
+              <div class="metric-trend text-success mt-1">
+                <i class="bi bi-arrow-up"></i>
+                <small>+0.1%</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Row -->
+      <div class="row g-3 mb-4">
+        <!-- User Growth Chart -->
+        <div class="col-lg-8">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">User Growth Trends</h5>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas id="userGrowthChart" width="400" height="200"></canvas>
+              </div>
+              <!-- Mock chart data display -->
+              <div class="row mt-3">
+                @for (data of analyticsData().userGrowth; track data.month) {
+                  <div class="col">
+                    <div class="text-center">
+                      <small class="text-muted d-block">{{ data.month }}</small>
+                      <strong class="text-primary">{{ formatNumber(data.users) }}</strong>
+                      <small class="text-success d-block">{{ formatNumber(data.active) }} active</small>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Engagement Metrics -->
+        <div class="col-lg-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Engagement Metrics</h5>
+            </div>
+            <div class="card-body">
+              <div class="engagement-metric mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <span class="fw-medium">Daily Active Users</span>
+                  <span class="badge bg-primary">{{ formatNumber(analyticsData().engagement.dailyActiveUsers) }}</span>
+                </div>
+              </div>
+              <div class="engagement-metric mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <span class="fw-medium">Avg Session Time</span>
+                  <span class="badge bg-success">{{ analyticsData().engagement.averageSessionTime }}m</span>
+                </div>
+              </div>
+              <div class="engagement-metric mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <span class="fw-medium">Questions Attempted</span>
+                  <span class="badge bg-info">{{ formatNumber(analyticsData().engagement.questionsAttempted) }}</span>
+                </div>
+              </div>
+              <div class="engagement-metric mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <span class="fw-medium">Code Submissions</span>
+                  <span class="badge bg-warning">{{ formatNumber(analyticsData().engagement.codeSubmissions) }}</span>
+                </div>
+              </div>
+              <div class="engagement-metric">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <span class="fw-medium">Forum Posts</span>
+                  <span class="badge bg-secondary">{{ formatNumber(analyticsData().engagement.forumPosts) }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interview Statistics -->
+      <div class="row g-3 mb-4">
+        <!-- Interview Types -->
+        <div class="col-lg-6">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Interview Types Distribution</h5>
+            </div>
+            <div class="card-body">
+              @for (item of analyticsData().interviewStats.byType; track item.type) {
+                <div class="stat-item mb-3">
+                  <div class="d-flex justify-content-between align-items-center mb-1">
+                    <span class="fw-medium">{{ item.type }}</span>
+                    <div>
+                      <span class="badge bg-primary me-2">{{ formatNumber(item.count) }}</span>
+                      <small class="text-muted">{{ item.percentage | number:'1.1-1' }}%</small>
+                    </div>
+                  </div>
+                  <div class="progress" style="height: 6px;">
+                    <div class="progress-bar bg-primary" [style.width.%]="item.percentage"></div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Difficulty Distribution -->
+        <div class="col-lg-6">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Difficulty Distribution</h5>
+            </div>
+            <div class="card-body">
+              @for (item of analyticsData().interviewStats.byDifficulty; track item.difficulty) {
+                <div class="stat-item mb-3">
+                  <div class="d-flex justify-content-between align-items-center mb-1">
+                    <span class="fw-medium" [class]="getDifficultyColorClass(item.difficulty)">{{ item.difficulty }}</span>
+                    <div>
+                      <span class="badge" 
+                            [class]="item.difficulty === 'Easy' ? 'bg-success' : 
+                                   item.difficulty === 'Medium' ? 'bg-warning' : 'bg-danger'">
+                        {{ formatNumber(item.count) }}
+                      </span>
+                      <small class="text-muted ms-2">{{ item.percentage | number:'1.1-1' }}%</small>
+                    </div>
+                  </div>
+                  <div class="progress" style="height: 6px;">
+                    <div class="progress-bar" 
+                         [class]="item.difficulty === 'Easy' ? 'bg-success' : 
+                                item.difficulty === 'Medium' ? 'bg-warning' : 'bg-danger'"
+                         [style.width.%]="item.percentage"></div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Performance Analytics -->
+      <div class="row g-3">
+        <!-- Category Performance -->
+        <div class="col-lg-7">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Performance by Category</h5>
+            </div>
+            <div class="card-body">
+              @for (item of analyticsData().performance.averageScoreByCategory; track item.category) {
+                <div class="category-performance mb-3">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="fw-medium">{{ item.category }}</span>
+                    <span class="badge" [class]="getCategoryPerformanceColor(item.score)">
+                      {{ item.score | number:'1.1-1' }}%
+                    </span>
+                  </div>
+                  <div class="progress" style="height: 8px;">
+                    <div class="progress-bar" 
+                         [class]="getCategoryPerformanceColor(item.score)"
+                         [style.width.%]="item.score"></div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Top Performers -->
+        <div class="col-lg-5">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Top Performers</h5>
+            </div>
+            <div class="card-body">
+              @for (performer of analyticsData().performance.topPerformers; track performer.name; let i = $index) {
+                <div class="performer-item d-flex align-items-center mb-3">
+                  <div class="rank-badge me-3">
+                    <span class="badge" 
+                          [class]="i === 0 ? 'bg-warning' : i === 1 ? 'bg-secondary' : i === 2 ? 'bg-dark' : 'bg-light text-dark'">
+                      {{ i + 1 }}
+                    </span>
+                  </div>
+                  <div class="performer-info flex-grow-1">
+                    <div class="fw-medium">{{ performer.name }}</div>
+                    <small class="text-muted">{{ performer.interviews }} interviews</small>
+                  </div>
+                  <div class="performer-score">
+                    <span class="badge bg-success">{{ performer.score | number:'1.1-1' }}%</span>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>

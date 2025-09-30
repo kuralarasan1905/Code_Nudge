@@ -1,0 +1,444 @@
+<!-- Registration Form -->
+<div class="register-container">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-lg-6 col-md-8 col-sm-10">
+        <div class="register-card">
+          <!-- Header -->
+          <div class="register-header text-center mb-4">
+            <h2 class="h3 mb-2">Create Your Account</h2>
+            <p class="text-muted">Join CodeNugde to start your interview preparation journey</p>
+          </div>
+
+          <!-- Progress Steps -->
+          <div class="progress-steps mb-4">
+            <div class="step" [class.active]="currentStep() >= 1" [class.completed]="currentStep() > 1">
+              <div class="step-number">1</div>
+              <div class="step-label">Basic Info</div>
+            </div>
+            <div class="step-line" [class.completed]="currentStep() > 1"></div>
+            <div class="step" [class.active]="currentStep() >= 2" [class.completed]="currentStep() > 2">
+              <div class="step-number">2</div>
+              <div class="step-label">Security</div>
+            </div>
+            <div class="step-line" [class.completed]="currentStep() > 2"></div>
+            <div class="step" [class.active]="currentStep() >= 3">
+              <div class="step-number">3</div>
+              <div class="step-label">Profile</div>
+            </div>
+          </div>
+
+          <!-- Error Message -->
+          @if (errorMessage()) {
+            <div class="alert alert-danger" role="alert">
+              <i class="bi bi-exclamation-triangle-fill me-2"></i>
+              {{ errorMessage() }}
+            </div>
+          }
+
+          <!-- Success Message -->
+          @if (successMessage()) {
+            <div class="alert alert-success" role="alert">
+              <i class="bi bi-check-circle-fill me-2"></i>
+              {{ successMessage() }}
+            </div>
+          }
+
+          <!-- Registration Form -->
+          <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+            
+            <!-- Step 1: Basic Information -->
+            @if (currentStep() === 1) {
+              <div class="step-content">
+                <h4 class="step-title mb-3">Basic Information</h4>
+                
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label for="firstName" class="form-label">First Name *</label>
+                    <input 
+                      type="text" 
+                      class="form-control" 
+                      id="firstName"
+                      formControlName="firstName"
+                      [class.is-invalid]="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched"
+                      placeholder="Enter your first name">
+                    @if (registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched) {
+                      <div class="invalid-feedback">
+                        @if (registerForm.get('firstName')?.errors?.['required']) {
+                          First name is required
+                        }
+                        @if (registerForm.get('firstName')?.errors?.['minlength']) {
+                          First name must be at least 2 characters
+                        }
+                      </div>
+                    }
+                  </div>
+
+                  <div class="col-md-6">
+                    <label for="lastName" class="form-label">Last Name *</label>
+                    <input 
+                      type="text" 
+                      class="form-control" 
+                      id="lastName"
+                      formControlName="lastName"
+                      [class.is-invalid]="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched"
+                      placeholder="Enter your last name">
+                    @if (registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched) {
+                      <div class="invalid-feedback">
+                        @if (registerForm.get('lastName')?.errors?.['required']) {
+                          Last name is required
+                        }
+                        @if (registerForm.get('lastName')?.errors?.['minlength']) {
+                          Last name must be at least 2 characters
+                        }
+                      </div>
+                    }
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="email" class="form-label">Email Address *</label>
+                  <input 
+                    type="email" 
+                    class="form-control" 
+                    id="email"
+                    formControlName="email"
+                    [class.is-invalid]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
+                    placeholder="Enter your email address">
+                  @if (registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
+                    <div class="invalid-feedback">
+                      @if (registerForm.get('email')?.errors?.['required']) {
+                        Email is required
+                      }
+                      @if (registerForm.get('email')?.errors?.['email']) {
+                        Please enter a valid email address
+                      }
+                    </div>
+                  }
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">Account Type *</label>
+                  <div class="role-selection">
+                    @for (role of userRoles; track role.value) {
+                      <div class="role-option">
+                        <input
+                          type="radio"
+                          class="form-check-input"
+                          [id]="'role-' + role.value"
+                          [value]="role.value"
+                          formControlName="role"
+                          (change)="onRoleChange()">
+                        <label [for]="'role-' + role.value" class="role-label">
+                          <div class="role-header">
+                            <i class="bi" [class]="role.value === 'student' ? 'bi-person-graduation' : 'bi-shield-check'"></i>
+                            <span class="role-name">{{ role.label }}</span>
+                          </div>
+                          <p class="role-description">{{ role.description }}</p>
+                        </label>
+                      </div>
+                    }
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="phoneNumber" class="form-label">Phone Number</label>
+                  <input
+                    type="tel"
+                    class="form-control"
+                    id="phoneNumber"
+                    formControlName="phoneNumber"
+                    [class.is-invalid]="registerForm.get('phoneNumber')?.invalid && registerForm.get('phoneNumber')?.touched"
+                    placeholder="Enter your phone number">
+                  @if (registerForm.get('phoneNumber')?.invalid && registerForm.get('phoneNumber')?.touched) {
+                    <div class="invalid-feedback">
+                      @if (registerForm.get('phoneNumber')?.errors?.['pattern']) {
+                        Please enter a valid phone number
+                      }
+                    </div>
+                  }
+                </div>
+
+                <div class="step-actions">
+                  <button type="button" class="btn btn-primary" (click)="nextStep()" [disabled]="!isStep1Valid()">
+                    Next Step
+                    <i class="bi bi-arrow-right ms-1"></i>
+                  </button>
+                </div>
+              </div>
+            }
+
+            <!-- Step 2: Security -->
+            @if (currentStep() === 2) {
+              <div class="step-content">
+                <h4 class="step-title mb-3">Account Security</h4>
+
+                <div class="mb-3">
+                  <label for="password" class="form-label">Password *</label>
+                  <div class="input-group">
+                    <input 
+                      [type]="showPassword() ? 'text' : 'password'" 
+                      class="form-control" 
+                      id="password"
+                      formControlName="password"
+                      [class.is-invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
+                      placeholder="Create a strong password">
+                    <button 
+                      type="button" 
+                      class="btn btn-outline-secondary" 
+                      (click)="togglePasswordVisibility('password')">
+                      <i class="bi" [class]="showPassword() ? 'bi-eye-slash' : 'bi-eye'"></i>
+                    </button>
+                  </div>
+                  @if (registerForm.get('password')?.invalid && registerForm.get('password')?.touched) {
+                    <div class="invalid-feedback d-block">
+                      @if (registerForm.get('password')?.errors?.['required']) {
+                        Password is required
+                      }
+                      @if (registerForm.get('password')?.errors?.['minlength']) {
+                        Password must be at least 8 characters
+                      }
+                      @if (registerForm.get('password')?.errors?.['passwordStrength']) {
+                        Password must contain uppercase, lowercase, number, and special character
+                      }
+                    </div>
+                  }
+                  
+                  <!-- Password Strength Indicator -->
+                  @if (registerForm.get('password')?.value) {
+                    <div class="password-strength mt-2">
+                      <div class="strength-bar">
+                        <div class="strength-fill" [style.width.%]="getPasswordStrength()" 
+                             [class]="getPasswordStrengthClass()"></div>
+                      </div>
+                      <small class="text-muted">{{ getPasswordStrengthText() }}</small>
+                    </div>
+                  }
+                </div>
+
+                <div class="mb-3">
+                  <label for="confirmPassword" class="form-label">Confirm Password *</label>
+                  <div class="input-group">
+                    <input 
+                      [type]="showConfirmPassword() ? 'text' : 'password'" 
+                      class="form-control" 
+                      id="confirmPassword"
+                      formControlName="confirmPassword"
+                      [class.is-invalid]="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched"
+                      placeholder="Confirm your password">
+                    <button 
+                      type="button" 
+                      class="btn btn-outline-secondary" 
+                      (click)="togglePasswordVisibility('confirmPassword')">
+                      <i class="bi" [class]="showConfirmPassword() ? 'bi-eye-slash' : 'bi-eye'"></i>
+                    </button>
+                  </div>
+                  @if (registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched) {
+                    <div class="invalid-feedback d-block">
+                      @if (registerForm.get('confirmPassword')?.errors?.['required']) {
+                        Please confirm your password
+                      }
+                      @if (registerForm.get('confirmPassword')?.errors?.['passwordMismatch']) {
+                        Passwords do not match
+                      }
+                    </div>
+                  }
+                </div>
+
+                <div class="step-actions">
+                  <button type="button" class="btn btn-outline-secondary me-2" (click)="previousStep()">
+                    <i class="bi bi-arrow-left me-1"></i>
+                    Previous
+                  </button>
+                  <button type="button" class="btn btn-primary" (click)="nextStep()" [disabled]="!isStep2Valid()">
+                    Next Step
+                    <i class="bi bi-arrow-right ms-1"></i>
+                  </button>
+                </div>
+              </div>
+            }
+
+            <!-- Step 3: Profile -->
+            @if (currentStep() === 3) {
+              <div class="step-content">
+                <h4 class="step-title mb-3">Complete Your Profile</h4>
+
+                <!-- Student-specific fields -->
+                @if (isStudentRole()) {
+                  <div class="mb-3">
+                    <label for="registerId" class="form-label">Student Register ID *</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="registerId"
+                      formControlName="registerId"
+                      placeholder="Enter your student register ID"
+                      [class.is-invalid]="registerForm.get('registerId')?.invalid && registerForm.get('registerId')?.touched">
+                    @if (registerForm.get('registerId')?.invalid && registerForm.get('registerId')?.touched) {
+                      <div class="invalid-feedback">
+                        @if (registerForm.get('registerId')?.errors?.['required']) {
+                          Register ID is required for students
+                        }
+                        @if (registerForm.get('registerId')?.errors?.['minlength']) {
+                          Register ID must be at least 3 characters long
+                        }
+                      </div>
+                    }
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="college" class="form-label">University/College *</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="college"
+                      formControlName="college"
+                      placeholder="Enter your university or college name"
+                      [class.is-invalid]="registerForm.get('college')?.invalid && registerForm.get('college')?.touched">
+                    @if (registerForm.get('college')?.invalid && registerForm.get('college')?.touched) {
+                      <div class="invalid-feedback">
+                        @if (registerForm.get('college')?.errors?.['required']) {
+                          University/College is required for students
+                        }
+                        @if (registerForm.get('college')?.errors?.['minlength']) {
+                          University/College name must be at least 2 characters long
+                        }
+                      </div>
+                    }
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="branch" class="form-label">Branch/Department *</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="branch"
+                      formControlName="branch"
+                      placeholder="Enter your branch or department (e.g., Computer Science)"
+                      [class.is-invalid]="registerForm.get('branch')?.invalid && registerForm.get('branch')?.touched">
+                    @if (registerForm.get('branch')?.invalid && registerForm.get('branch')?.touched) {
+                      <div class="invalid-feedback">
+                        @if (registerForm.get('branch')?.errors?.['required']) {
+                          Branch/Department is required for students
+                        }
+                        @if (registerForm.get('branch')?.errors?.['minlength']) {
+                          Branch/Department must be at least 2 characters long
+                        }
+                      </div>
+                    }
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="graduationYear" class="form-label">Graduation Year *</label>
+                    <select
+                      class="form-select"
+                      id="graduationYear"
+                      formControlName="graduationYear"
+                      [class.is-invalid]="registerForm.get('graduationYear')?.invalid && registerForm.get('graduationYear')?.touched">
+                      <option value="">Select graduation year</option>
+                      <option value="2020">2020</option>
+                      <option value="2021">2021</option>
+                      <option value="2022">2022</option>
+                      <option value="2023">2023</option>
+                      <option value="2024">2024</option>
+                      <option value="2025">2025</option>
+                      <option value="2026">2026</option>
+                      <option value="2027">2027</option>
+                      <option value="2028">2028</option>
+                      <option value="2029">2029</option>
+                      <option value="2030">2030</option>
+                    </select>
+                    @if (registerForm.get('graduationYear')?.invalid && registerForm.get('graduationYear')?.touched) {
+                      <div class="invalid-feedback">
+                        @if (registerForm.get('graduationYear')?.errors?.['required']) {
+                          Graduation year is required for students
+                        }
+                        @if (registerForm.get('graduationYear')?.errors?.['min'] || registerForm.get('graduationYear')?.errors?.['max']) {
+                          Graduation year must be between 2020 and 2030
+                        }
+                      </div>
+                    }
+                  </div>
+                }
+
+                <!-- Admin-specific fields -->
+                @if (isAdminRole()) {
+                  <div class="mb-3">
+                    <label for="employeeId" class="form-label">Employee ID *</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="employeeId"
+                      formControlName="employeeId"
+                      placeholder="Enter your employee ID"
+                      [class.is-invalid]="registerForm.get('employeeId')?.invalid && registerForm.get('employeeId')?.touched">
+                    @if (registerForm.get('employeeId')?.invalid && registerForm.get('employeeId')?.touched) {
+                      <div class="invalid-feedback">
+                        @if (registerForm.get('employeeId')?.errors?.['required']) {
+                          Employee ID is required for admins
+                        }
+                        @if (registerForm.get('employeeId')?.errors?.['minlength']) {
+                          Employee ID must be at least 3 characters long
+                        }
+                      </div>
+                    }
+                  </div>
+                }
+
+                <!-- Terms and conditions -->
+                <div class="mb-3">
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="acceptTerms"
+                      formControlName="acceptTerms"
+                      [class.is-invalid]="registerForm.get('acceptTerms')?.invalid && registerForm.get('acceptTerms')?.touched">
+                    <label class="form-check-label" for="acceptTerms">
+                      I agree to the <a href="#" class="text-primary">Terms of Service</a> and
+                      <a href="#" class="text-primary">Privacy Policy</a> *
+                    </label>
+                    @if (registerForm.get('acceptTerms')?.invalid && registerForm.get('acceptTerms')?.touched) {
+                      <div class="invalid-feedback d-block">
+                        You must agree to the terms and conditions
+                      </div>
+                    }
+                  </div>
+                </div>
+
+                <div class="step-actions">
+                  <button type="button" class="btn btn-outline-secondary me-2" (click)="previousStep()">
+                    <i class="bi bi-arrow-left me-1"></i>
+                    Previous
+                  </button>
+                  <button 
+                    type="submit" 
+                    class="btn btn-primary" 
+                    [disabled]="registerForm.invalid || isLoading()">
+                    @if (isLoading()) {
+                      <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                      Creating Account...
+                    } @else {
+                      <i class="bi bi-person-plus me-1"></i>
+                      Create Account
+                    }
+                  </button>
+                </div>
+              </div>
+            }
+          </form>
+
+          <!-- Login Link -->
+          <div class="text-center mt-4">
+            <p class="mb-0">
+              Already have an account? 
+              <a routerLink="/auth/login" class="text-primary text-decoration-none">
+                Sign in here
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

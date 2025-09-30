@@ -1,0 +1,246 @@
+# CodeNugde - Angular Project Summary
+
+## 1. Project Overview
+
+CodeNugde is a comprehensive mock interview and coding practice platform built with Angular 20. The application serves as an educational tool for students to prepare for technical interviews through coding challenges, HR questions, mock interviews, and performance analytics. It features role-based access with separate interfaces for students and administrators.
+
+**Primary Purpose**: Enable students to practice coding problems, participate in mock interviews, and track their progress while providing administrators with tools to manage content and monitor platform usage.
+
+## 2. Core Features
+
+### Student Features:
+- **Dashboard**: Personal analytics, progress tracking, recent activity, and performance metrics
+- **Practice Coding**: Solve coding problems with real-time code execution and testing
+- **Mock Interviews**: Schedule and participate in simulated interview sessions
+- **HR Questions**: Practice behavioral and HR interview questions
+- **Leaderboard**: Compare performance with other students
+- **Profile Management**: Track personal progress and achievements
+- **Balance System**: Credit-based system for premium features and interviews
+- **Experiences**: Share and read interview experiences
+
+### Admin Features:
+- **Admin Dashboard**: Platform analytics, user statistics, and system overview
+- **Question Management**: Create, edit, and manage coding and HR questions
+- **User Management**: Monitor and manage student and admin accounts
+- **Interview Monitoring**: Track ongoing and completed interview sessions
+- **Analytics**: Detailed reports on platform usage and performance
+- **Settings**: Platform configuration and system settings
+
+## 3. Folder/Module Structure
+
+### Core Application Structure:
+```
+src/
+├── app/
+│   ├── components/
+│   │   ├── admin/           # Admin-specific components
+│   │   │   ├── admin-layout/
+│   │   │   ├── dashboard/
+│   │   │   ├── question-management/
+│   │   │   ├── user-management/
+│   │   │   ├── interview-monitoring/
+│   │   │   ├── analytics/
+│   │   │   └── settings/
+│   │   ├── auth/            # Authentication components
+│   │   │   ├── login/
+│   │   │   └── register/
+│   │   ├── shared/          # Shared components
+│   │   │   ├── navigation/
+│   │   │   └── not-found/
+│   │   └── student/         # Student-specific components
+│   │       ├── dashboard/
+│   │       ├── practice/
+│   │       ├── interview/
+│   │       ├── hr-questions/
+│   │       ├── leaderboard/
+│   │       ├── profile/
+│   │       ├── experiences/
+│   │       └── balance/
+│   ├── models/              # TypeScript interfaces and enums
+│   ├── services/            # Business logic and API services
+│   ├── app.config.ts        # Application configuration
+│   ├── app.routes.ts        # Routing configuration
+│   └── app.ts              # Root component
+├── index.html              # Main HTML file
+├── main.ts                 # Application bootstrap
+└── styles.css              # Global styles
+```
+
+### Key Modules:
+- **Authentication Module**: Login/register with role-based routing
+- **Student Module**: All student-facing features and components
+- **Admin Module**: Administrative tools and management interfaces
+- **Shared Module**: Common components like navigation and utilities
+
+## 4. Technology Stack
+
+### Frontend Framework:
+- **Angular 20.1.0** - Latest Angular version with standalone components
+- **TypeScript 5.8.2** - Strongly typed JavaScript
+- **RxJS 7.8.0** - Reactive programming with Observables
+
+### UI Framework:
+- **Bootstrap 5.3.7** - CSS framework for responsive design
+- **Bootstrap Icons** - Icon library for UI elements
+
+### Development Tools:
+- **Angular CLI 20.1.1** - Command-line interface for development
+- **Karma & Jasmine** - Testing framework
+- **ESBuild** - Fast bundler for development
+
+### Server-Side Rendering:
+- **Angular SSR** - Server-side rendering support
+- **Express.js** - Node.js server for SSR
+
+### Build System:
+- **Angular Build System** - Modern build pipeline with Vite-like performance
+- **TypeScript Compiler** - Strict type checking enabled
+
+## 5. Key Files & Purpose
+
+### Configuration Files:
+- **angular.json**: Angular CLI configuration, build settings, and project structure
+- **package.json**: Dependencies, scripts, and project metadata
+- **tsconfig.json**: TypeScript compiler configuration with strict mode
+- **app.config.ts**: Application providers and dependency injection setup
+
+### Core Application Files:
+- **main.ts**: Application bootstrap with standalone component architecture
+- **app.ts**: Root component with navigation and router outlet
+- **app.routes.ts**: Complete routing configuration with lazy loading
+- **app.html**: Root template with navigation and main content area
+
+### Model Files:
+- **user.model.ts**: User roles, profiles, and authentication interfaces
+- **question.model.ts**: Coding questions, test cases, and question types
+- **interview.model.ts**: Mock interview structures and feedback systems
+- **dashboard.model.ts**: Analytics, metrics, and dashboard data structures
+- **balance.model.ts**: Payment, subscription, and credit system models
+- **api-interfaces.model.ts**: Comprehensive API response interfaces
+
+## 6. Data Flow
+
+### Authentication Flow:
+1. User logs in through AuthService
+2. JWT token stored in localStorage
+3. User role determines navigation (student/admin routes)
+4. AuthService maintains reactive user state using signals
+
+### Student Practice Flow:
+1. Student selects coding problem from practice list
+2. Code editor loads with language templates
+3. CodeExecutionService handles code compilation and testing
+4. Results displayed with test case feedback
+5. Progress tracked in DashboardService
+
+### Admin Management Flow:
+1. Admin accesses management interfaces
+2. CRUD operations through respective services
+3. Real-time updates using reactive signals
+4. Analytics data aggregated for dashboard display
+
+### Data Management:
+- **Reactive State**: Angular signals for component state management
+- **HTTP Services**: RESTful API communication with error handling
+- **Caching**: BehaviorSubjects for data caching and state persistence
+- **Real-time Updates**: Observable streams for live data synchronization
+
+## 7. Notable Logic or Patterns
+
+### Modern Angular Features:
+- **Standalone Components**: No NgModules, direct component imports
+- **Angular Signals**: Reactive state management replacing traditional observables
+- **Zoneless Change Detection**: Improved performance with manual change detection
+- **Lazy Loading**: Route-based code splitting for optimal bundle sizes
+
+### Architectural Patterns:
+- **Service-Oriented Architecture**: Business logic separated into injectable services
+- **Reactive Programming**: RxJS observables for asynchronous data handling
+- **Component Communication**: Signal-based state sharing between components
+- **Route Guards**: Authentication and role-based access control (implied)
+
+### Code Organization:
+- **Feature-Based Structure**: Components organized by functional areas
+- **Shared Services**: Centralized business logic and API communication
+- **Type Safety**: Comprehensive TypeScript interfaces for all data structures
+- **Error Handling**: Consistent error management across services
+
+### UI/UX Patterns:
+- **Responsive Design**: Bootstrap-based mobile-first approach
+- **Loading States**: Signal-based loading indicators throughout the app
+- **Form Validation**: Reactive forms with comprehensive validation
+- **Real-time Feedback**: Immediate UI updates using reactive patterns
+
+## 8. Build & Deployment Details
+
+### Development:
+```bash
+npm install          # Install dependencies
+ng serve            # Start development server (localhost:4200)
+ng build --watch    # Build with file watching
+ng test             # Run unit tests
+```
+
+### Production Build:
+```bash
+ng build                    # Production build
+ng build --configuration production  # Optimized production build
+```
+
+### Server-Side Rendering:
+```bash
+npm run serve:ssr:CodeNugde  # Start SSR server
+```
+
+### Build Configuration:
+- **Development**: Source maps enabled, no optimization
+- **Production**: Minification, tree-shaking, and bundle optimization
+- **Bundle Budgets**: 2MB initial bundle limit, 20kB component style limit
+- **Output Hashing**: Enabled for cache busting in production
+
+### Deployment Requirements:
+- Node.js environment for SSR
+- Static file serving for client-side assets
+- API backend for data services (not included in this frontend project)
+
+## 9. Possible Improvements
+
+### Performance Optimizations:
+- **OnPush Change Detection**: Implement for better performance in large lists
+- **Virtual Scrolling**: For large question lists and leaderboards
+- **Image Optimization**: Lazy loading and responsive images
+- **Bundle Analysis**: Identify and eliminate unused dependencies
+
+### Code Quality:
+- **Unit Testing**: Comprehensive test coverage for services and components
+- **E2E Testing**: End-to-end testing for critical user flows
+- **Code Splitting**: Further optimize lazy loading strategies
+- **Error Boundaries**: Implement global error handling
+
+### Feature Enhancements:
+- **Real-time Collaboration**: WebSocket integration for live coding sessions
+- **Code Review System**: Peer review functionality for solutions
+- **Advanced Analytics**: More detailed performance insights
+- **Mobile App**: Progressive Web App (PWA) capabilities
+
+### Security Improvements:
+- **Route Guards**: Implement authentication and authorization guards
+- **Input Sanitization**: XSS protection for user-generated content
+- **CSRF Protection**: Cross-site request forgery prevention
+- **Content Security Policy**: Implement CSP headers
+
+### Developer Experience:
+- **API Documentation**: Generate documentation from TypeScript interfaces
+- **Storybook Integration**: Component documentation and testing
+- **Automated Testing**: CI/CD pipeline with automated testing
+- **Code Formatting**: Prettier and ESLint configuration for consistency
+
+### Scalability:
+- **State Management**: Consider NgRx for complex state management
+- **Micro-frontends**: Split into smaller, independent applications
+- **CDN Integration**: Optimize asset delivery
+- **Database Optimization**: Implement efficient data fetching strategies
+
+---
+
+**Note**: This project represents a modern Angular application with comprehensive features for interview preparation. The codebase demonstrates best practices in Angular development, including the use of standalone components, signals, and reactive programming patterns. The modular architecture supports both current functionality and future scalability requirements.

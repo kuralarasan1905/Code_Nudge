@@ -1,0 +1,73 @@
+<!-- Admin Layout -->
+<div class="admin-layout">
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="sidebar-header">
+      <div class="brand">
+        <i class="bi bi-code-square fs-3 text-primary"></i>
+        <span class="brand-text">CodeNugde Admin</span>
+      </div>
+    </div>
+    
+    <div class="sidebar-content">
+      <ul class="nav-menu">
+        @for (item of navigationItems; track item.path) {
+          <li class="nav-item">
+            <a 
+              [routerLink]="item.path" 
+              class="nav-link"
+              [class.active]="isActiveRoute(item.path)"
+              routerLinkActive="active">
+              <i [class]="'bi ' + item.icon"></i>
+              <div class="nav-text">
+                <span class="nav-label">{{ item.label }}</span>
+                <small class="nav-description">{{ item.description }}</small>
+              </div>
+            </a>
+          </li>
+        }
+      </ul>
+    </div>
+    
+    <div class="sidebar-footer">
+      <div class="user-info">
+        <div class="user-avatar">
+          <i class="bi bi-person-circle"></i>
+        </div>
+        <div class="user-details">
+          <span class="user-name">Admin User</span>
+          <small class="user-role">Administrator</small>
+        </div>
+      </div>
+      <button class="btn btn-outline-light btn-sm logout-btn">
+        <i class="bi bi-box-arrow-right"></i>
+        Logout
+      </button>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Top Bar -->
+    <header class="top-bar">
+      <button class="sidebar-toggle btn btn-link">
+        <i class="bi bi-list"></i>
+      </button>
+      
+      <div class="top-bar-actions">
+        <button class="btn btn-outline-primary btn-sm">
+          <i class="bi bi-bell"></i>
+          <span class="badge bg-danger">3</span>
+        </button>
+        <button class="btn btn-outline-primary btn-sm">
+          <i class="bi bi-gear"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Page Content -->
+    <div class="page-content">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+</div>

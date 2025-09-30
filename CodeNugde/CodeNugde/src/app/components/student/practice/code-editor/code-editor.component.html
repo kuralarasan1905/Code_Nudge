@@ -1,0 +1,289 @@
+<!-- Code Editor Container -->
+<div class="container-fluid h-100 p-0">
+  <!-- Loading State -->
+  @if (isLoading()) {
+    <div class="d-flex justify-content-center align-items-center h-100">
+      <div class="text-center">
+        <div class="spinner-border text-primary mb-3" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="text-muted">Loading question...</p>
+      </div>
+    </div>
+  }
+
+  <!-- Error State -->
+  @else if (error()) {
+    <div class="alert alert-danger m-3" role="alert">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i>
+      {{ error() }}
+    </div>
+  }
+
+  <!-- Main Editor Layout -->
+  @else if (question()) {
+    <div class="row h-100 g-0">
+      <!-- Left Panel - Problem Description -->
+      <div class="col-md-5 border-end">
+        <div class="h-100 d-flex flex-column">
+          <!-- Header -->
+          <div class="p-3 border-bottom bg-light">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h4 class="mb-1">{{ question()!.title }}</h4>
+                <div class="d-flex align-items-center gap-2">
+                  <span class="badge bg-success">{{ question()!.difficulty | titlecase }}</span>
+                  <span class="text-muted">{{ question()!.acceptanceRate }}% acceptance</span>
+                  @if (question()!.isSolved) {
+                    <span class="badge bg-success">
+                      <i class="bi bi-check-circle me-1"></i>
+                      Solved
+                    </span>
+                  }
+                </div>
+              </div>
+              <div class="d-flex gap-2">
+                <button class="btn btn-outline-secondary btn-sm" (click)="toggleHints()">
+                  <i class="bi bi-lightbulb"></i>
+                  Hints
+                </button>
+                <a [routerLink]="['/student/practice']" class="btn btn-outline-primary btn-sm">
+                  <i class="bi bi-arrow-left"></i>
+                  Back
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tabs -->
+          <div class="border-bottom">
+            <ul class="nav nav-tabs border-0">
+              <li class="nav-item">
+                <button 
+                  class="nav-link"
+                  [class.active]="activeTab() === 'description'"
+                  (click)="setActiveTab('description')"
+                >
+                  Description
+                </button>
+              </li>
+              <li class="nav-item">
+                <button 
+                  class="nav-link"
+                  [class.active]="activeTab() === 'testcases'"
+                  (click)="setActiveTab('testcases')"
+                >
+                  Test Cases
+                </button>
+              </li>
+              <li class="nav-item">
+                <button 
+                  class="nav-link"
+                  [class.active]="activeTab() === 'submissions'"
+                  (click)="setActiveTab('submissions')"
+                >
+                  Submissions
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Tab Content -->
+          <div class="flex-grow-1 overflow-auto p-3">
+            <!-- Description Tab -->
+            @if (activeTab() === 'description') {
+              <div class="problem-description">
+                <div style="white-space: pre-line;">{{ question()!.description }}</div>
+                
+                @if (showHints()) {
+                  <div class="alert alert-info mt-4">
+                    <h6><i class="bi bi-lightbulb me-2"></i>Hints</h6>
+                    <ul class="mb-0">
+                      <li>Use a hash map to store the numbers and their indices</li>
+                      <li>For each number, check if target - number exists in the hash map</li>
+                      <li>Return the indices when you find the complement</li>
+                    </ul>
+                  </div>
+                }
+              </div>
+            }
+
+            <!-- Test Cases Tab -->
+            @if (activeTab() === 'testcases') {
+              <div class="test-cases">
+                @for (testCase of testCases(); track testCase.id) {
+                  <div class="card mb-3">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                      <span class="fw-semibold">Test Case {{ testCase.id }}</span>
+                      @if (testCase.isPassed !== null) {
+                        <span class="badge" [class.bg-success]="testCase.isPassed" [class.bg-danger]="!testCase.isPassed">
+                          @if (testCase.isPassed) {
+                            <i class="bi bi-check-circle me-1"></i>Passed
+                          } @else {
+                            <i class="bi bi-x-circle me-1"></i>Failed
+                          }
+                        </span>
+                      }
+                    </div>
+                    <div class="card-body">
+                      <div class="mb-2">
+                        <strong>Input:</strong>
+                        <pre class="bg-light p-2 mt-1 rounded">{{ testCase.input }}</pre>
+                      </div>
+                      <div class="mb-2">
+                        <strong>Expected Output:</strong>
+                        <pre class="bg-light p-2 mt-1 rounded">{{ testCase.expectedOutput }}</pre>
+                      </div>
+                      <div>
+                        <strong>Explanation:</strong>
+                        <p class="text-muted mt-1">{{ testCase.explanation }}</p>
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+
+            <!-- Submissions Tab -->
+            @if (activeTab() === 'submissions') {
+              <div class="submissions">
+                @if (question()!.isSolved) {
+                  <div class="alert alert-success">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    You have successfully solved this problem!
+                  </div>
+                } @else {
+                  <div class="text-center py-4">
+                    <i class="bi bi-inbox text-muted" style="font-size: 3rem;"></i>
+                    <p class="text-muted mt-2">No submissions yet</p>
+                    <p class="text-muted">Submit your solution to see results here</p>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Panel - Code Editor -->
+      <div class="col-md-7">
+        <div class="h-100 d-flex flex-column">
+          <!-- Editor Header -->
+          <div class="p-3 border-bottom bg-light">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="d-flex align-items-center gap-3">
+                <label class="form-label mb-0">Language:</label>
+                <select 
+                  class="form-select form-select-sm" 
+                  style="width: auto;"
+                  [value]="selectedLanguage()"
+                  (change)="onLanguageChange($any($event.target).value)"
+                >
+                  @for (lang of languages; track lang.value) {
+                    <option [value]="lang.value">
+                      {{ lang.label }}
+                    </option>
+                  }
+                </select>
+              </div>
+              <div class="d-flex gap-2">
+                <button class="btn btn-outline-secondary btn-sm" (click)="resetCode()">
+                  <i class="bi bi-arrow-clockwise me-1"></i>
+                  Reset
+                </button>
+                <button 
+                  class="btn btn-outline-primary btn-sm" 
+                  (click)="runCode()"
+                  [disabled]="isExecuting()"
+                >
+                  @if (isExecuting()) {
+                    <span class="spinner-border spinner-border-sm me-1"></span>
+                    Running...
+                  } @else {
+                    <i class="bi bi-play-circle me-1"></i>
+                    Run Code
+                  }
+                </button>
+                <button 
+                  class="btn btn-success btn-sm" 
+                  (click)="submitSolution()"
+                  [disabled]="isExecuting()"
+                >
+                  @if (isExecuting()) {
+                    <span class="spinner-border spinner-border-sm me-1"></span>
+                    Submitting...
+                  } @else {
+                    <i class="bi bi-check-circle me-1"></i>
+                    Submit
+                  }
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Code Editor -->
+          <div class="flex-grow-1 d-flex flex-column">
+            <div class="flex-grow-1 position-relative">
+              <textarea
+                #codeEditor
+                class="form-control h-100 border-0 font-monospace"
+                style="resize: none; font-size: 14px; line-height: 1.5;"
+                [value]="code()"
+                (input)="onCodeChange($any($event.target).value || '')"
+                placeholder="Write your code here..."
+              ></textarea>
+            </div>
+          </div>
+
+          <!-- Execution Results -->
+          @if (executionResult()) {
+            <div class="border-top bg-light">
+              <div class="p-3">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <h6 class="mb-0">
+                    <i class="bi bi-terminal me-2"></i>
+                    Execution Results
+                  </h6>
+                  <span 
+                    class="badge fs-6"
+                    [class.bg-success]="executionResult().status === 'success' || executionResult().status === 'accepted'"
+                    [class.bg-danger]="executionResult().status === 'error'"
+                    [class.bg-warning]="executionResult().status === 'timeout'"
+                  >
+                    {{ executionResult().status | titlecase }}
+                  </span>
+                </div>
+
+                @if (executionResult().status === 'success' || executionResult().status === 'accepted') {
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <small class="text-muted">Runtime:</small>
+                      <div>{{ executionResult().executionTime || executionResult().runtime }}</div>
+                    </div>
+                    <div class="col-md-6">
+                      <small class="text-muted">Memory:</small>
+                      <div>{{ executionResult().memoryUsed || executionResult().memory }}</div>
+                    </div>
+                    @if (executionResult().testCasesPassed !== undefined) {
+                      <div class="col-12">
+                        <small class="text-muted">Test Cases:</small>
+                        <div>
+                          {{ executionResult().testCasesPassed }} / {{ executionResult().totalTestCases }} passed
+                        </div>
+                      </div>
+                    }
+                  </div>
+                } @else {
+                  <div class="text-danger">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    Execution failed. Please check your code and try again.
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  }
+</div>

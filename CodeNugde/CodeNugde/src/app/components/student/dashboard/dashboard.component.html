@@ -1,0 +1,329 @@
+<!-- Student Dashboard Container -->
+<div class="container-fluid py-4">
+  <!-- Loading State -->
+  @if (isLoading()) {
+    <div class="d-flex justify-content-center align-items-center" style="height: 400px;">
+      <div class="text-center">
+        <div class="spinner-border text-primary mb-3" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="text-muted">Loading your dashboard...</p>
+      </div>
+    </div>
+  }
+
+  <!-- Error State -->
+  @else if (error()) {
+    <div class="alert alert-danger" role="alert">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i>
+      {{ error() }}
+      <button class="btn btn-outline-danger btn-sm ms-3" (click)="refreshDashboard()">
+        <i class="bi bi-arrow-clockwise me-1"></i>
+        Retry
+      </button>
+    </div>
+  }
+
+  <!-- Dashboard Content -->
+  @else if (dashboardData()) {
+    <!-- Header Section -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h1 class="h3 mb-1">{{ getGreeting() }}</h1>
+            <p class="text-muted mb-0">Here's your learning progress overview</p>
+          </div>
+          <div class="d-flex gap-2">
+            <button class="btn btn-outline-primary" (click)="refreshDashboard()">
+              <i class="bi bi-arrow-clockwise me-1"></i>
+              Refresh
+            </button>
+            <button class="btn btn-primary" (click)="navigateToInterviews()">
+              <i class="bi bi-play-circle me-1"></i>
+              Start Interview
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Overview Stats Cards -->
+    @if (overview()) {
+      <div class="row mb-4">
+        <!-- Total Interviews -->
+        <div class="col-xl-3 col-md-6 mb-3">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-center">
+                <div class="flex-shrink-0">
+                  <div class="bg-primary bg-opacity-10 rounded-3 p-3">
+                    <i class="bi bi-people-fill text-primary fs-4"></i>
+                  </div>
+                </div>
+                <div class="flex-grow-1 ms-3">
+                  <h6 class="text-muted mb-1">Total Interviews</h6>
+                  <h4 class="mb-0">{{ formatNumber(overview()!.totalInterviews) }}</h4>
+                  <small class="text-success">
+                    <i class="bi bi-arrow-up"></i>
+                    {{ overview()!.completedInterviews }} completed
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Average Score -->
+        <div class="col-xl-3 col-md-6 mb-3">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-center">
+                <div class="flex-shrink-0">
+                  <div class="bg-success bg-opacity-10 rounded-3 p-3">
+                    <i class="bi bi-graph-up text-success fs-4"></i>
+                  </div>
+                </div>
+                <div class="flex-grow-1 ms-3">
+                  <h6 class="text-muted mb-1">Average Score</h6>
+                  <h4 class="mb-0">{{ overview()!.averageScore }}%</h4>
+                  <small [class]="getPerformanceTrend().class">
+                    <i class="bi bi-arrow-{{ getPerformanceTrend().direction }}"></i>
+                    {{ getPerformanceTrend().percentage }}% this week
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Study Time -->
+        <div class="col-xl-3 col-md-6 mb-3">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-center">
+                <div class="flex-shrink-0">
+                  <div class="bg-info bg-opacity-10 rounded-3 p-3">
+                    <i class="bi bi-clock-fill text-info fs-4"></i>
+                  </div>
+                </div>
+                <div class="flex-grow-1 ms-3">
+                  <h6 class="text-muted mb-1">Study Time</h6>
+                  <h4 class="mb-0">{{ formatDuration(overview()!.totalTimeSpent) }}</h4>
+                  <small class="text-muted">Total practice time</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Current Streak -->
+        <div class="col-xl-3 col-md-6 mb-3">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-center">
+                <div class="flex-shrink-0">
+                  <div class="bg-warning bg-opacity-10 rounded-3 p-3">
+                    <i class="bi bi-fire text-warning fs-4"></i>
+                  </div>
+                </div>
+                <div class="flex-grow-1 ms-3">
+                  <h6 class="text-muted mb-1">Study Streak</h6>
+                  <h4 class="mb-0">{{ overview()!.currentStreak }}</h4>
+                  <small [class]="getStreakStatus().class">
+                    {{ getStreakStatus().text }}
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Main Content Row -->
+    <div class="row">
+      <!-- Left Column -->
+      <div class="col-lg-8">
+        <!-- Recent Activity -->
+        <div class="card border-0 shadow-sm mb-4">
+          <div class="card-header bg-white border-0 py-3">
+            <div class="d-flex justify-content-between align-items-center">
+              <h5 class="mb-0">
+                <i class="bi bi-activity me-2"></i>
+                Recent Activity
+              </h5>
+              <button 
+                class="btn btn-sm btn-outline-primary"
+                (click)="toggleActivityView()"
+              >
+                {{ showAllActivity() ? 'Show Less' : 'View All' }}
+              </button>
+            </div>
+          </div>
+          <div class="card-body">
+            @if (recentActivity().length > 0) {
+              <div class="activity-timeline">
+                @for (activity of recentActivity(); track activity.id) {
+                  @if (showAllActivity() || $index < 5) {
+                    <div class="activity-item d-flex align-items-start mb-3">
+                      <div class="activity-icon me-3">
+                        <i [class]="getActivityIcon(activity.type)"></i>
+                      </div>
+                      <div class="flex-grow-1">
+                        <p class="mb-1">{{ activity.description }}</p>
+                        <small class="text-muted">{{ getTimeAgo(activity.timestamp) }}</small>
+                      </div>
+                    </div>
+                  }
+                }
+              </div>
+            } @else {
+              <div class="text-center py-4">
+                <i class="bi bi-inbox text-muted fs-1"></i>
+                <p class="text-muted mt-2">No recent activity</p>
+                <button class="btn btn-primary" (click)="navigateToPractice()">
+                  Start Practicing
+                </button>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Upcoming Interviews -->
+        @if (upcomingInterviews().length > 0) {
+          <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white border-0 py-3">
+              <h5 class="mb-0">
+                <i class="bi bi-calendar-event me-2"></i>
+                Upcoming Interviews
+              </h5>
+            </div>
+            <div class="card-body">
+              @for (interview of upcomingInterviews(); track interview.id) {
+                <div class="interview-item border rounded p-3 mb-3">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                      <h6 class="mb-1">{{ interview.title }}</h6>
+                      <p class="text-muted mb-2">
+                        <i class="bi bi-clock me-1"></i>
+                        {{ interview.scheduledAt | date:'medium' }}
+                      </p>
+                      <span class="badge bg-primary">{{ interview.type }}</span>
+                    </div>
+                    <button class="btn btn-outline-primary btn-sm">
+                      <i class="bi bi-play-circle me-1"></i>
+                      Start
+                    </button>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- Right Column -->
+      <div class="col-lg-4">
+        <!-- Recommendations -->
+        <div class="card border-0 shadow-sm mb-4">
+          <div class="card-header bg-white border-0 py-3">
+            <div class="d-flex justify-content-between align-items-center">
+              <h5 class="mb-0">
+                <i class="bi bi-lightbulb me-2"></i>
+                Recommendations
+              </h5>
+              <button 
+                class="btn btn-sm btn-outline-primary"
+                (click)="toggleRecommendationsView()"
+              >
+                {{ showAllRecommendations() ? 'Show Less' : 'View All' }}
+              </button>
+            </div>
+          </div>
+          <div class="card-body">
+            @if (recommendations().length > 0) {
+              @for (recommendation of recommendations(); track recommendation.id) {
+                @if (showAllRecommendations() || $index < 3) {
+                  <div class="recommendation-item border rounded p-3 mb-3">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                      <h6 class="mb-0">{{ recommendation.title }}</h6>
+                      <span [class]="getRecommendationBadgeClass(recommendation.priority)">
+                        {{ recommendation.priority }}
+                      </span>
+                    </div>
+                    <p class="text-muted small mb-2">{{ recommendation.description }}</p>
+                    <div class="d-flex gap-2">
+                      <button 
+                        class="btn btn-sm btn-primary"
+                        (click)="completeRecommendation(recommendation.id)"
+                      >
+                        Complete
+                      </button>
+                      <button 
+                        class="btn btn-sm btn-outline-secondary"
+                        (click)="dismissRecommendation(recommendation.id)"
+                      >
+                        Dismiss
+                      </button>
+                    </div>
+                  </div>
+                }
+              }
+            } @else {
+              <div class="text-center py-3">
+                <i class="bi bi-check-circle text-success fs-1"></i>
+                <p class="text-muted mt-2">All caught up!</p>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Achievements -->
+        @if (achievements().length > 0) {
+          <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 py-3">
+              <h5 class="mb-0">
+                <i class="bi bi-trophy me-2"></i>
+                Recent Achievements
+              </h5>
+            </div>
+            <div class="card-body">
+              @for (achievement of achievements(); track achievement.id) {
+                @if ($index < 3) {
+                  <div class="achievement-item d-flex align-items-center mb-3">
+                    <div class="achievement-icon me-3">
+                      <i class="bi bi-trophy-fill text-warning fs-4"></i>
+                      @if (isRecentlyUnlocked(achievement)) {
+                        <span class="badge bg-success position-absolute translate-middle rounded-pill">
+                          New
+                        </span>
+                      }
+                    </div>
+                    <div class="flex-grow-1">
+                      <h6 class="mb-1">{{ achievement.title }}</h6>
+                      <p class="text-muted small mb-0">{{ achievement.description }}</p>
+                      @if (!achievement.isUnlocked) {
+                        <div class="progress mt-2" style="height: 4px;">
+                          <div 
+                            class="progress-bar" 
+                            [style.width.%]="getAchievementProgress(achievement)"
+                          ></div>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                }
+              }
+              <div class="text-center">
+                <button class="btn btn-sm btn-outline-primary" (click)="navigateToProfile()">
+                  View All Achievements
+                </button>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

@@ -1,0 +1,489 @@
+<!-- Question Management -->
+<div class="question-management">
+  <div class="container-fluid">
+    <!-- Header -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h1 class="h3 mb-0">Question Management</h1>
+            <p class="text-muted mb-0">Manage interview questions and test cases</p>
+          </div>
+          <button class="btn btn-primary" (click)="openCreateModal()">
+            <i class="bi bi-plus-circle me-2"></i>
+            Add Question
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="row g-3">
+              <div class="col-lg-3 col-md-6">
+                <label class="form-label">Search</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  placeholder="Search questions..."
+                  [(ngModel)]="searchTerm">
+              </div>
+              <div class="col-lg-2 col-md-6">
+                <label class="form-label">Type</label>
+                <select class="form-select" [(ngModel)]="selectedType">
+                  @for (option of typeOptions; track option.value) {
+                    <option [value]="option.value">{{ option.label }}</option>
+                  }
+                </select>
+              </div>
+              <div class="col-lg-2 col-md-6">
+                <label class="form-label">Category</label>
+                <select class="form-select" [(ngModel)]="selectedCategory">
+                  @for (option of categoryOptions; track option.value) {
+                    <option [value]="option.value">{{ option.label }}</option>
+                  }
+                </select>
+              </div>
+              <div class="col-lg-2 col-md-6">
+                <label class="form-label">Difficulty</label>
+                <select class="form-select" [(ngModel)]="selectedDifficulty">
+                  @for (option of difficultyOptions; track option.value) {
+                    <option [value]="option.value">{{ option.label }}</option>
+                  }
+                </select>
+              </div>
+              <div class="col-lg-3 col-md-12">
+                <label class="form-label">&nbsp;</label>
+                <div class="d-flex gap-2">
+                  <button class="btn btn-outline-secondary" (click)="clearFilters()">
+                    <i class="bi bi-x-circle me-1"></i>
+                    Clear
+                  </button>
+                  <button class="btn btn-outline-primary" (click)="loadQuestions()">
+                    <i class="bi bi-arrow-clockwise me-1"></i>
+                    Refresh
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Error Message -->
+    @if (error()) {
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="alert alert-danger" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            {{ error() }}
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Loading State -->
+    @if (isLoading()) {
+      <div class="row">
+        <div class="col-12">
+          <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-3 text-muted">Loading questions...</p>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Questions List -->
+    @if (!isLoading()) {
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h5 class="mb-0">Questions ({{ filteredQuestions().length }})</h5>
+              <div class="text-muted">
+                Total: {{ questions().length }} questions
+              </div>
+            </div>
+            <div class="card-body p-0">
+              @if (filteredQuestions().length > 0) {
+                <div class="table-responsive">
+                  <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                      <tr>
+                        <th>Title</th>
+                        <th>Type</th>
+                        <th>Category</th>
+                        <th>Difficulty</th>
+                        <th>Time Limit</th>
+                        <th>Points</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (question of filteredQuestions(); track question.id) {
+                        <tr>
+                          <td>
+                            <div>
+                              <h6 class="mb-1">{{ question.title }}</h6>
+                              <small class="text-muted">{{ question.description | slice:0:100 }}...</small>
+                            </div>
+                          </td>
+                          <td>
+                            <span [class]="getTypeBadgeClass(question.type)">
+                              {{ question.type | titlecase }}
+                            </span>
+                          </td>
+                          <td>
+                            <span class="text-muted">{{ formatCategoryName(question.category) }}</span>
+                          </td>
+                          <td>
+                            <span [class]="getDifficultyBadgeClass(question.difficulty)">
+                              {{ question.difficulty | titlecase }}
+                            </span>
+                          </td>
+                          <td>{{ question.timeLimit }} min</td>
+                          <td>{{ question.points }} pts</td>
+                          <td>
+                            <div class="form-check form-switch">
+                              <input 
+                                class="form-check-input" 
+                                type="checkbox" 
+                                [checked]="question.isActive"
+                                (change)="toggleQuestionStatus(question)">
+                              <label class="form-check-label">
+                                {{ question.isActive ? 'Active' : 'Inactive' }}
+                              </label>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="btn-group btn-group-sm">
+                              <button 
+                                class="btn btn-outline-primary" 
+                                (click)="openEditModal(question)"
+                                title="Edit">
+                                <i class="bi bi-pencil"></i>
+                              </button>
+                              <button 
+                                class="btn btn-outline-danger" 
+                                (click)="openDeleteModal(question)"
+                                title="Delete">
+                                <i class="bi bi-trash"></i>
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              } @else {
+                <div class="text-center py-5">
+                  <i class="bi bi-question-circle fs-1 text-muted"></i>
+                  <h5 class="mt-3">No questions found</h5>
+                  <p class="text-muted">Try adjusting your filters or create a new question.</p>
+                  <button class="btn btn-primary" (click)="openCreateModal()">
+                    <i class="bi bi-plus-circle me-2"></i>
+                    Create First Question
+                  </button>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>
+
+<!-- Create Question Modal -->
+@if (showCreateModal()) {
+  <div class="modal fade show d-block" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Create New Question</h5>
+          <button type="button" class="btn-close" (click)="closeModals()"></button>
+        </div>
+        <form [formGroup]="questionForm" (ngSubmit)="createQuestion()">
+          <div class="modal-body">
+            <div class="row g-3">
+              <div class="col-12">
+                <label class="form-label">Title *</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  formControlName="title"
+                  placeholder="Enter question title">
+              </div>
+              <div class="col-12">
+                <label class="form-label">Description *</label>
+                <textarea 
+                  class="form-control" 
+                  rows="4" 
+                  formControlName="description"
+                  placeholder="Enter question description"></textarea>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Type *</label>
+                <select class="form-select" formControlName="type">
+                  <option [value]="QuestionType.CODING">Coding</option>
+                  <option [value]="QuestionType.MCQ">Multiple Choice</option>
+                  <option [value]="QuestionType.THEORETICAL">Theoretical</option>
+                  <option [value]="QuestionType.SYSTEM_DESIGN">System Design</option>
+                  <option [value]="QuestionType.BEHAVIORAL">Behavioral</option>
+                  <option [value]="QuestionType.APTITUDE">Aptitude</option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Category *</label>
+                <select class="form-select" formControlName="category">
+                  <option [value]="QuestionCategory.DATA_STRUCTURES">Data Structures</option>
+                  <option [value]="QuestionCategory.ALGORITHMS">Algorithms</option>
+                  <option [value]="QuestionCategory.SYSTEM_DESIGN">System Design</option>
+                  <option [value]="QuestionCategory.DATABASE">Database</option>
+                  <option [value]="QuestionCategory.NETWORKING">Networking</option>
+                  <option [value]="QuestionCategory.BEHAVIORAL">Behavioral</option>
+                  <option [value]="QuestionCategory.APTITUDE">Aptitude</option>
+                  <option [value]="QuestionCategory.PROGRAMMING_CONCEPTS">Programming Concepts</option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Difficulty *</label>
+                <select class="form-select" formControlName="difficulty">
+                  <option [value]="DifficultyLevel.EASY">Easy</option>
+                  <option [value]="DifficultyLevel.MEDIUM">Medium</option>
+                  <option [value]="DifficultyLevel.HARD">Hard</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Time Limit (minutes) *</label>
+                <input 
+                  type="number" 
+                  class="form-control" 
+                  formControlName="timeLimit"
+                  min="1" 
+                  max="180">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Points *</label>
+                <input 
+                  type="number" 
+                  class="form-control" 
+                  formControlName="points"
+                  min="1" 
+                  max="100">
+              </div>
+              <div class="col-12">
+                <label class="form-label">Tags</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  formControlName="tags"
+                  placeholder="Enter tags separated by commas">
+                <small class="form-text text-muted">Separate multiple tags with commas</small>
+              </div>
+              <div class="col-12">
+                <div class="form-check">
+                  <input 
+                    class="form-check-input" 
+                    type="checkbox" 
+                    formControlName="isActive">
+                  <label class="form-check-label">
+                    Active (visible to students)
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="closeModals()">Cancel</button>
+            <button 
+              type="submit" 
+              class="btn btn-primary" 
+              [disabled]="questionForm.invalid || isCreating()">
+              @if (isCreating()) {
+                <span class="spinner-border spinner-border-sm me-2"></span>
+                Creating...
+              } @else {
+                <i class="bi bi-plus-circle me-2"></i>
+                Create Question
+              }
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="modal-backdrop fade show"></div>
+}
+
+<!-- Edit Question Modal -->
+@if (showEditModal()) {
+  <div class="modal fade show d-block" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Edit Question</h5>
+          <button type="button" class="btn-close" (click)="closeModals()"></button>
+        </div>
+        <form [formGroup]="questionForm" (ngSubmit)="updateQuestion()">
+          <div class="modal-body">
+            <!-- Same form fields as create modal -->
+            <div class="row g-3">
+              <div class="col-12">
+                <label class="form-label">Title *</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  formControlName="title">
+              </div>
+              <div class="col-12">
+                <label class="form-label">Description *</label>
+                <textarea 
+                  class="form-control" 
+                  rows="4" 
+                  formControlName="description"></textarea>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Type *</label>
+                <select class="form-select" formControlName="type">
+                  <option [value]="QuestionType.CODING">Coding</option>
+                  <option [value]="QuestionType.MCQ">Multiple Choice</option>
+                  <option [value]="QuestionType.THEORETICAL">Theoretical</option>
+                  <option [value]="QuestionType.SYSTEM_DESIGN">System Design</option>
+                  <option [value]="QuestionType.BEHAVIORAL">Behavioral</option>
+                  <option [value]="QuestionType.APTITUDE">Aptitude</option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Category *</label>
+                <select class="form-select" formControlName="category">
+                  <option [value]="QuestionCategory.DATA_STRUCTURES">Data Structures</option>
+                  <option [value]="QuestionCategory.ALGORITHMS">Algorithms</option>
+                  <option [value]="QuestionCategory.SYSTEM_DESIGN">System Design</option>
+                  <option [value]="QuestionCategory.DATABASE">Database</option>
+                  <option [value]="QuestionCategory.NETWORKING">Networking</option>
+                  <option [value]="QuestionCategory.BEHAVIORAL">Behavioral</option>
+                  <option [value]="QuestionCategory.APTITUDE">Aptitude</option>
+                  <option [value]="QuestionCategory.PROGRAMMING_CONCEPTS">Programming Concepts</option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Difficulty *</label>
+                <select class="form-select" formControlName="difficulty">
+                  <option [value]="DifficultyLevel.EASY">Easy</option>
+                  <option [value]="DifficultyLevel.MEDIUM">Medium</option>
+                  <option [value]="DifficultyLevel.HARD">Hard</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Time Limit (minutes) *</label>
+                <input 
+                  type="number" 
+                  class="form-control" 
+                  formControlName="timeLimit"
+                  min="1" 
+                  max="180">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Points *</label>
+                <input 
+                  type="number" 
+                  class="form-control" 
+                  formControlName="points"
+                  min="1" 
+                  max="100">
+              </div>
+              <div class="col-12">
+                <label class="form-label">Tags</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  formControlName="tags">
+              </div>
+              <div class="col-12">
+                <div class="form-check">
+                  <input 
+                    class="form-check-input" 
+                    type="checkbox" 
+                    formControlName="isActive">
+                  <label class="form-check-label">
+                    Active (visible to students)
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="closeModals()">Cancel</button>
+            <button 
+              type="submit" 
+              class="btn btn-primary" 
+              [disabled]="questionForm.invalid || isUpdating()">
+              @if (isUpdating()) {
+                <span class="spinner-border spinner-border-sm me-2"></span>
+                Updating...
+              } @else {
+                <i class="bi bi-check-circle me-2"></i>
+                Update Question
+              }
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="modal-backdrop fade show"></div>
+}
+
+<!-- Delete Confirmation Modal -->
+@if (showDeleteModal()) {
+  <div class="modal fade show d-block" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Delete Question</h5>
+          <button type="button" class="btn-close" (click)="closeModals()"></button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete this question?</p>
+          @if (selectedQuestion()) {
+            <div class="alert alert-warning">
+              <strong>{{ selectedQuestion()!.title }}</strong><br>
+              <small>{{ selectedQuestion()!.description | slice:0:100 }}...</small>
+            </div>
+          }
+          <p class="text-danger">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            This action cannot be undone.
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeModals()">Cancel</button>
+          <button 
+            type="button" 
+            class="btn btn-danger" 
+            (click)="deleteQuestion()"
+            [disabled]="isDeleting()">
+            @if (isDeleting()) {
+              <span class="spinner-border spinner-border-sm me-2"></span>
+              Deleting...
+            } @else {
+              <i class="bi bi-trash me-2"></i>
+              Delete Question
+            }
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-backdrop fade show"></div>
+}

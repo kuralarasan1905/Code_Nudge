@@ -1,0 +1,312 @@
+<!-- Interview List Container -->
+<div class="container-fluid py-4">
+  <!-- Header Section -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <h1 class="h3 mb-1">Mock Interviews</h1>
+          <p class="text-muted mb-0">Practice and track your interview performance</p>
+        </div>
+        <div class="d-flex gap-2">
+          <button class="btn btn-outline-primary" (click)="refreshInterviews()">
+            <i class="bi bi-arrow-clockwise me-1"></i>
+            Refresh
+          </button>
+          <button class="btn btn-primary" (click)="createNewInterview()">
+            <i class="bi bi-plus-circle me-1"></i>
+            New Interview
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters Section -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <div class="row g-3">
+            <!-- Search -->
+            <div class="col-md-4">
+              <label class="form-label">Search</label>
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="bi bi-search"></i>
+                </span>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Search interviews..."
+                  [ngModel]="searchTerm()"
+                  (ngModelChange)="searchTerm.set($event)"
+                />
+              </div>
+            </div>
+
+            <!-- Type Filter -->
+            <div class="col-md-3">
+              <label class="form-label">Type</label>
+              <select
+                class="form-select"
+                [ngModel]="selectedType()"
+                (ngModelChange)="selectedType.set($event)"
+              >
+                @for (type of interviewTypes; track type.value) {
+                  <option [value]="type.value">{{ type.label }}</option>
+                }
+              </select>
+            </div>
+
+            <!-- Status Filter -->
+            <div class="col-md-3">
+              <label class="form-label">Status</label>
+              <select
+                class="form-select"
+                [ngModel]="selectedStatus()"
+                (ngModelChange)="selectedStatus.set($event)"
+              >
+                @for (status of interviewStatuses; track status.value) {
+                  <option [value]="status.value">{{ status.label }}</option>
+                }
+              </select>
+            </div>
+
+            <!-- Clear Filters -->
+            <div class="col-md-2 d-flex align-items-end">
+              <button class="btn btn-outline-secondary w-100" (click)="clearFilters()">
+                <i class="bi bi-x-circle me-1"></i>
+                Clear
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  @if (isLoading()) {
+    <div class="d-flex justify-content-center align-items-center" style="height: 300px;">
+      <div class="text-center">
+        <div class="spinner-border text-primary mb-3" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="text-muted">Loading interviews...</p>
+      </div>
+    </div>
+  }
+
+  <!-- Error State -->
+  @else if (error()) {
+    <div class="alert alert-danger" role="alert">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i>
+      {{ error() }}
+      <button class="btn btn-outline-danger btn-sm ms-3" (click)="refreshInterviews()">
+        <i class="bi bi-arrow-clockwise me-1"></i>
+        Retry
+      </button>
+    </div>
+  }
+
+  <!-- Interviews List -->
+  @else {
+    @if (filteredInterviews().length > 0) {
+      <div class="row">
+        @for (interview of filteredInterviews(); track interview.id) {
+          <div class="col-lg-6 col-xl-4 mb-4">
+            <div class="card border-0 shadow-sm h-100 interview-card">
+              <div class="card-body">
+                <!-- Interview Header -->
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                  <div class="flex-grow-1">
+                    <h5 class="card-title mb-1">{{ interview.title }}</h5>
+                    <div class="d-flex gap-2 mb-2">
+                      <span [class]="getTypeBadgeClass(interview.type)">
+                        {{ interview.type | titlecase }}
+                      </span>
+                      <span [class]="getStatusBadgeClass(interview.status)">
+                        {{ interview.status | titlecase }}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="dropdown">
+                    <button
+                      class="btn btn-sm btn-outline-secondary"
+                      type="button"
+                      data-bs-toggle="dropdown"
+                    >
+                      <i class="bi bi-three-dots-vertical"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                      @if (canViewResults(interview)) {
+                        <li>
+                          <a class="dropdown-item" (click)="viewResults(interview.id)">
+                            <i class="bi bi-graph-up me-2"></i>
+                            View Results
+                          </a>
+                        </li>
+                      }
+                      <li>
+                        <a class="dropdown-item text-danger" (click)="deleteInterview(interview.id)">
+                          <i class="bi bi-trash me-2"></i>
+                          Delete
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                <!-- Interview Details -->
+                <div class="interview-details mb-3">
+                  <div class="row g-2 text-sm">
+                    <div class="col-6">
+                      <i class="bi bi-clock text-muted me-1"></i>
+                      <span class="text-muted">Duration:</span>
+                      <span class="ms-1">{{ formatDuration(interview.duration) }}</span>
+                    </div>
+                    <div class="col-6">
+                      <i class="bi bi-list-task text-muted me-1"></i>
+                      <span class="text-muted">Questions:</span>
+                      <span class="ms-1">{{ interview.questions.length }}</span>
+                    </div>
+                    <div class="col-6">
+                      <i class="bi bi-calendar text-muted me-1"></i>
+                      <span class="text-muted">Scheduled:</span>
+                      <span class="ms-1">{{ interview.scheduledAt | date:'short' }}</span>
+                    </div>
+                    @if (interview.status === InterviewStatus.COMPLETED) {
+                      <div class="col-6">
+                        <i class="bi bi-trophy text-muted me-1"></i>
+                        <span class="text-muted">Score:</span>
+                        <span 
+                          class="ms-1 fw-bold"
+                          [class]="getScoreColorClass(interview.totalScore, interview.maxScore)"
+                        >
+                          {{ interview.totalScore }}/{{ interview.maxScore }}
+                        </span>
+                      </div>
+                    }
+                  </div>
+                </div>
+
+                <!-- Progress Bar (for completed interviews) -->
+                @if (interview.status === InterviewStatus.COMPLETED) {
+                  <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                      <small class="text-muted">Performance</small>
+                      <small class="text-muted">
+                        {{ ((interview.totalScore / interview.maxScore) * 100) | number:'1.0-0' }}%
+                      </small>
+                    </div>
+                    <div class="progress" style="height: 6px;">
+                      <div
+                        class="progress-bar"
+                        [style.width.%]="(interview.totalScore / interview.maxScore) * 100"
+                        [class]="getScoreColorClass(interview.totalScore, interview.maxScore).replace('text-', 'bg-')"
+                      ></div>
+                    </div>
+                  </div>
+                }
+
+                <!-- Action Buttons -->
+                <div class="d-flex gap-2">
+                  @if (canStartInterview(interview)) {
+                    <button
+                      class="btn btn-primary flex-grow-1"
+                      (click)="startInterview(interview.id)"
+                    >
+                      <i class="bi bi-play-circle me-1"></i>
+                      Start Interview
+                    </button>
+                  } @else if (canResumeInterview(interview)) {
+                    <button
+                      class="btn btn-warning flex-grow-1"
+                      (click)="startInterview(interview.id)"
+                    >
+                      <i class="bi bi-play-circle me-1"></i>
+                      Resume Interview
+                    </button>
+                  } @else if (canViewResults(interview)) {
+                    <button
+                      class="btn btn-success flex-grow-1"
+                      (click)="viewResults(interview.id)"
+                    >
+                      <i class="bi bi-graph-up me-1"></i>
+                      View Results
+                    </button>
+                  } @else {
+                    <button class="btn btn-secondary flex-grow-1" disabled>
+                      <i class="bi bi-x-circle me-1"></i>
+                      {{ interview.status | titlecase }}
+                    </button>
+                  }
+                </div>
+
+                <!-- Time Until Interview (for scheduled) -->
+                @if (interview.status === InterviewStatus.SCHEDULED) {
+                  <div class="text-center mt-2">
+                    <small class="text-muted">
+                      Starts in {{ getTimeUntilInterview(interview.scheduledAt) }}
+                    </small>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- Pagination (if needed) -->
+      <div class="d-flex justify-content-center mt-4">
+        <nav>
+          <ul class="pagination">
+            <li class="page-item disabled">
+              <a class="page-link" href="#" tabindex="-1">Previous</a>
+            </li>
+            <li class="page-item active">
+              <a class="page-link" href="#">1</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="#">2</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="#">3</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="#">Next</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    } @else {
+      <!-- Empty State -->
+      <div class="text-center py-5">
+        <div class="empty-state">
+          <i class="bi bi-clipboard-data text-muted display-1"></i>
+          <h4 class="mt-3 mb-2">No Interviews Found</h4>
+          <p class="text-muted mb-4">
+            @if (searchTerm() || selectedType() !== 'all' || selectedStatus() !== 'all') {
+              No interviews match your current filters. Try adjusting your search criteria.
+            } @else {
+              You haven't created any interviews yet. Start your first mock interview to practice!
+            }
+          </p>
+          <div class="d-flex gap-2 justify-content-center">
+            @if (searchTerm() || selectedType() !== 'all' || selectedStatus() !== 'all') {
+              <button class="btn btn-outline-primary" (click)="clearFilters()">
+                <i class="bi bi-x-circle me-1"></i>
+                Clear Filters
+              </button>
+            }
+            <button class="btn btn-primary" (click)="createNewInterview()">
+              <i class="bi bi-plus-circle me-1"></i>
+              Create Interview
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+  }
+</div>

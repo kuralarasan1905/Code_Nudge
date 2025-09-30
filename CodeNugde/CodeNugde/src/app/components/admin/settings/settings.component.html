@@ -1,0 +1,398 @@
+<!-- Settings Dashboard -->
+<div class="settings-dashboard">
+  <div class="container-fluid">
+    <!-- Header -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h1 class="h3 mb-0">Platform Settings</h1>
+            <p class="text-muted mb-0">Configure platform settings and preferences</p>
+          </div>
+          <div class="d-flex gap-2">
+            <button class="btn btn-outline-danger btn-sm" (click)="resetToDefaults()">
+              <i class="bi bi-arrow-clockwise me-2"></i>
+              Reset to Defaults
+            </button>
+            <button class="btn btn-outline-secondary btn-sm" (click)="clearCache()">
+              <i class="bi bi-trash me-2"></i>
+              Clear Cache
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Success/Error Messages -->
+    @if (successMessage()) {
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="alert alert-success" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            {{ successMessage() }}
+          </div>
+        </div>
+      </div>
+    }
+
+    @if (error()) {
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="alert alert-danger" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            {{ error() }}
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Settings Content -->
+    <div class="row">
+      <!-- Sidebar Navigation -->
+      <div class="col-lg-3 col-md-4">
+        <div class="card settings-nav">
+          <div class="card-body p-0">
+            <nav class="nav nav-pills flex-column">
+              @for (tab of tabs; track tab.id) {
+                <button 
+                  class="nav-link text-start"
+                  [class.active]="activeTab() === tab.id"
+                  (click)="setActiveTab(tab.id)">
+                  <i [class]="'bi ' + tab.icon + ' me-2'"></i>
+                  {{ tab.label }}
+                </button>
+              }
+            </nav>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings Content -->
+      <div class="col-lg-9 col-md-8">
+        <div class="card">
+          <div class="card-body">
+            <!-- General Settings -->
+            @if (activeTab() === 'general') {
+              <div class="settings-section">
+                <h4 class="section-title">General Settings</h4>
+                <form [formGroup]="generalForm" (ngSubmit)="saveGeneralSettings()">
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <label class="form-label">Platform Name</label>
+                      <input type="text" class="form-control" formControlName="platformName">
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">Support Email</label>
+                      <input type="email" class="form-control" formControlName="supportEmail">
+                    </div>
+                    <div class="col-12">
+                      <label class="form-label">Platform Description</label>
+                      <textarea class="form-control" rows="3" formControlName="platformDescription"></textarea>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">Timezone</label>
+                      <select class="form-select" formControlName="timezone">
+                        <option value="UTC">UTC</option>
+                        <option value="America/New_York">Eastern Time</option>
+                        <option value="America/Chicago">Central Time</option>
+                        <option value="America/Denver">Mountain Time</option>
+                        <option value="America/Los_Angeles">Pacific Time</option>
+                      </select>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">Language</label>
+                      <select class="form-select" formControlName="language">
+                        <option value="en">English</option>
+                        <option value="es">Spanish</option>
+                        <option value="fr">French</option>
+                        <option value="de">German</option>
+                      </select>
+                    </div>
+                    <div class="col-12">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" formControlName="maintenanceMode">
+                        <label class="form-check-label">
+                          Enable Maintenance Mode
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" formControlName="allowRegistration">
+                        <label class="form-check-label">
+                          Allow New User Registration
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" formControlName="requireEmailVerification">
+                        <label class="form-check-label">
+                          Require Email Verification
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mt-4">
+                    <button type="submit" class="btn btn-primary" [disabled]="generalForm.invalid || isSaving()">
+                      @if (isSaving()) {
+                        <span class="spinner-border spinner-border-sm me-2"></span>
+                        Saving...
+                      } @else {
+                        <i class="bi bi-check me-2"></i>
+                        Save Changes
+                      }
+                    </button>
+                  </div>
+                </form>
+              </div>
+            }
+
+            <!-- Email Settings -->
+            @if (activeTab() === 'email') {
+              <div class="settings-section">
+                <h4 class="section-title">Email Configuration</h4>
+                <form [formGroup]="emailForm" (ngSubmit)="saveEmailSettings()">
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <label class="form-label">SMTP Host</label>
+                      <input type="text" class="form-control" formControlName="smtpHost">
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">SMTP Port</label>
+                      <input type="number" class="form-control" formControlName="smtpPort">
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">SMTP Username</label>
+                      <input type="text" class="form-control" formControlName="smtpUsername">
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">SMTP Password</label>
+                      <input type="password" class="form-control" formControlName="smtpPassword">
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">Encryption</label>
+                      <select class="form-select" formControlName="smtpEncryption">
+                        <option value="none">None</option>
+                        <option value="tls">TLS</option>
+                        <option value="ssl">SSL</option>
+                      </select>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">From Email</label>
+                      <input type="email" class="form-control" formControlName="fromEmail">
+                    </div>
+                    <div class="col-12">
+                      <label class="form-label">From Name</label>
+                      <input type="text" class="form-control" formControlName="fromName">
+                    </div>
+                  </div>
+                  <div class="mt-4 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary" [disabled]="emailForm.invalid || isSaving()">
+                      @if (isSaving()) {
+                        <span class="spinner-border spinner-border-sm me-2"></span>
+                        Saving...
+                      } @else {
+                        <i class="bi bi-check me-2"></i>
+                        Save Changes
+                      }
+                    </button>
+                    <button type="button" class="btn btn-outline-primary" (click)="testEmailConfig()" [disabled]="emailForm.invalid || isSaving()">
+                      <i class="bi bi-envelope me-2"></i>
+                      Test Configuration
+                    </button>
+                  </div>
+                </form>
+              </div>
+            }
+
+            <!-- Security Settings -->
+            @if (activeTab() === 'security') {
+              <div class="settings-section">
+                <h4 class="section-title">Security Settings</h4>
+                <form [formGroup]="securityForm" (ngSubmit)="saveSecuritySettings()">
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <label class="form-label">Session Timeout (minutes)</label>
+                      <input type="number" class="form-control" formControlName="sessionTimeout">
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">Max Login Attempts</label>
+                      <input type="number" class="form-control" formControlName="maxLoginAttempts">
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">Password Min Length</label>
+                      <input type="number" class="form-control" formControlName="passwordMinLength">
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-check mt-4">
+                        <input class="form-check-input" type="checkbox" formControlName="enableTwoFactor">
+                        <label class="form-check-label">
+                          Enable Two-Factor Authentication
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" formControlName="requireSpecialChars">
+                        <label class="form-check-label">
+                          Require Special Characters in Password
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" formControlName="requireNumbers">
+                        <label class="form-check-label">
+                          Require Numbers in Password
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" formControlName="requireUppercase">
+                        <label class="form-check-label">
+                          Require Uppercase Letters in Password
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <label class="form-label">IP Whitelist (comma-separated)</label>
+                      <textarea class="form-control" rows="3" formControlName="ipWhitelist" placeholder="192.168.1.1, 10.0.0.1"></textarea>
+                    </div>
+                    <div class="col-12">
+                      <label class="form-label">CORS Origins</label>
+                      <input type="text" class="form-control" formControlName="corsOrigins">
+                    </div>
+                  </div>
+                  <div class="mt-4">
+                    <button type="submit" class="btn btn-primary" [disabled]="securityForm.invalid || isSaving()">
+                      @if (isSaving()) {
+                        <span class="spinner-border spinner-border-sm me-2"></span>
+                        Saving...
+                      } @else {
+                        <i class="bi bi-shield-check me-2"></i>
+                        Save Security Settings
+                      }
+                    </button>
+                  </div>
+                </form>
+              </div>
+            }
+
+            <!-- Interview Settings -->
+            @if (activeTab() === 'interview') {
+              <div class="settings-section">
+                <h4 class="section-title">Interview Configuration</h4>
+                <form [formGroup]="interviewForm" (ngSubmit)="saveInterviewSettings()">
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <label class="form-label">Default Duration (minutes)</label>
+                      <input type="number" class="form-control" formControlName="defaultDuration">
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">Max Concurrent Interviews</label>
+                      <input type="number" class="form-control" formControlName="maxConcurrentInterviews">
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">Auto-save Interval (seconds)</label>
+                      <input type="number" class="form-control" formControlName="autoSaveInterval">
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">Code Execution Timeout (seconds)</label>
+                      <input type="number" class="form-control" formControlName="codeExecutionTimeout">
+                    </div>
+                    <div class="col-12">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" formControlName="allowCodeUpload">
+                        <label class="form-check-label">
+                          Allow Code File Upload
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" formControlName="enableVideoRecording">
+                        <label class="form-check-label">
+                          Enable Video Recording
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" formControlName="enableScreenSharing">
+                        <label class="form-check-label">
+                          Enable Screen Sharing
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" formControlName="proctoring">
+                        <label class="form-check-label">
+                          Enable Proctoring
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mt-4">
+                    <button type="submit" class="btn btn-primary" [disabled]="interviewForm.invalid || isSaving()">
+                      @if (isSaving()) {
+                        <span class="spinner-border spinner-border-sm me-2"></span>
+                        Saving...
+                      } @else {
+                        <i class="bi bi-clipboard-data me-2"></i>
+                        Save Interview Settings
+                      }
+                    </button>
+                  </div>
+                </form>
+              </div>
+            }
+
+            <!-- Backup Settings -->
+            @if (activeTab() === 'backup') {
+              <div class="settings-section">
+                <h4 class="section-title">Backup & Restore</h4>
+                <div class="row g-4">
+                  <div class="col-md-6">
+                    <div class="backup-card">
+                      <div class="backup-icon">
+                        <i class="bi bi-cloud-download"></i>
+                      </div>
+                      <h5>Create Backup</h5>
+                      <p class="text-muted">Download a complete backup of your platform data including settings, users, and questions.</p>
+                      <button class="btn btn-primary" (click)="createBackup()" [disabled]="isSaving()">
+                        @if (isSaving()) {
+                          <span class="spinner-border spinner-border-sm me-2"></span>
+                          Creating...
+                        } @else {
+                          <i class="bi bi-download me-2"></i>
+                          Create Backup
+                        }
+                      </button>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="backup-card">
+                      <div class="backup-icon">
+                        <i class="bi bi-cloud-upload"></i>
+                      </div>
+                      <h5>Restore Backup</h5>
+                      <p class="text-muted">Upload and restore from a previous backup file. This will overwrite current data.</p>
+                      <input type="file" class="form-control mb-3" accept=".json" (change)="restoreBackup($event)">
+                      <small class="text-warning">
+                        <i class="bi bi-exclamation-triangle me-1"></i>
+                        This action cannot be undone
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

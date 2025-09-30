@@ -1,0 +1,262 @@
+<!-- Interview Experiences Container -->
+<div class="container-fluid h-100 p-0">
+  <!-- Loading State -->
+  @if (isLoading()) {
+    <div class="d-flex justify-content-center align-items-center h-100">
+      <div class="text-center">
+        <div class="spinner-border text-primary mb-3" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="text-muted">Loading interview experiences...</p>
+      </div>
+    </div>
+  }
+
+  <!-- Error State -->
+  @else if (error()) {
+    <div class="alert alert-danger m-3" role="alert">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i>
+      {{ error() }}
+    </div>
+  }
+
+  <!-- Main Content -->
+  @else {
+    <div class="h-100 d-flex flex-column">
+      <!-- Header -->
+      <div class="bg-light border-bottom p-3">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h4 class="mb-1">
+              <i class="bi bi-chat-square-text me-2"></i>
+              Interview Experiences
+            </h4>
+            <p class="text-muted mb-0">Learn from others' interview experiences</p>
+          </div>
+          <div class="d-flex gap-2">
+            <button class="btn btn-outline-secondary" (click)="refreshExperiences()">
+              <i class="bi bi-arrow-clockwise me-1"></i>
+              Refresh
+            </button>
+            <button class="btn btn-primary">
+              <i class="bi bi-plus-lg me-1"></i>
+              Share Experience
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="bg-white border-bottom p-3">
+        <div class="row g-3">
+          <!-- Search -->
+          <div class="col-md-4">
+            <div class="input-group">
+              <span class="input-group-text">
+                <i class="bi bi-search"></i>
+              </span>
+              <input 
+                type="text" 
+                class="form-control" 
+                placeholder="Search experiences..."
+                [value]="searchQuery()"
+                (input)="onSearchChange($any($event.target).value)"
+              >
+            </div>
+          </div>
+
+          <!-- Company Filter -->
+          <div class="col-md-2">
+            <select 
+              class="form-select"
+              [value]="selectedCompany()"
+              (change)="onCompanyChange($any($event.target).value)"
+            >
+              <option value="all">All Companies</option>
+              @for (company of companies(); track company) {
+                <option [value]="company">{{ company }}</option>
+              }
+            </select>
+          </div>
+
+          <!-- Outcome Filter -->
+          <div class="col-md-2">
+            <select 
+              class="form-select"
+              [value]="selectedOutcome()"
+              (change)="onOutcomeChange($any($event.target).value)"
+            >
+              <option value="all">All Outcomes</option>
+              <option value="selected">Selected</option>
+              <option value="rejected">Rejected</option>
+              <option value="pending">Pending</option>
+            </select>
+          </div>
+
+          <!-- Difficulty Filter -->
+          <div class="col-md-2">
+            <select 
+              class="form-select"
+              [value]="selectedDifficulty()"
+              (change)="onDifficultyChange($any($event.target).value)"
+            >
+              <option value="all">All Difficulties</option>
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="hard">Hard</option>
+            </select>
+          </div>
+
+          <!-- Sort -->
+          <div class="col-md-2">
+            <select 
+              class="form-select"
+              [value]="sortBy()"
+              (change)="onSortChange($any($event.target).value)"
+            >
+              <option value="recent">Most Recent</option>
+              <option value="popular">Most Popular</option>
+              <option value="company">By Company</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Filter Actions -->
+        <div class="d-flex justify-content-between align-items-center mt-3">
+          <div class="d-flex gap-2">
+            <button 
+              class="btn btn-sm"
+              [class]="showBookmarkedOnly() ? 'btn-primary' : 'btn-outline-primary'"
+              (click)="toggleBookmarkedFilter()"
+            >
+              <i class="bi bi-bookmark-fill me-1"></i>
+              Bookmarked Only
+            </button>
+            <button class="btn btn-sm btn-outline-secondary" (click)="clearFilters()">
+              <i class="bi bi-x-circle me-1"></i>
+              Clear Filters
+            </button>
+          </div>
+          <small class="text-muted">
+            {{ filteredExperiences().length }} experience(s) found
+          </small>
+        </div>
+      </div>
+
+      <!-- Experiences List -->
+      <div class="flex-grow-1 overflow-auto p-3">
+        @if (filteredExperiences().length === 0) {
+          <div class="text-center py-5">
+            <i class="bi bi-inbox text-muted" style="font-size: 3rem;"></i>
+            <h5 class="text-muted mt-3">No experiences found</h5>
+            <p class="text-muted">Try adjusting your filters or search terms</p>
+          </div>
+        } @else {
+          <div class="row g-3">
+            @for (experience of filteredExperiences(); track experience.id) {
+              <div class="col-12">
+                <div class="card h-100 shadow-sm">
+                  <div class="card-body">
+                    <!-- Header -->
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                      <div class="flex-grow-1">
+                        <h5 class="card-title mb-1">{{ experience.title }}</h5>
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                          <strong class="text-primary">{{ experience.company }}</strong>
+                          <span class="text-muted">•</span>
+                          <span class="text-muted">{{ experience.position }}</span>
+                          <span [class]="getDifficultyClass(experience.difficulty)">
+                            {{ experience.difficulty | titlecase }}
+                          </span>
+                          <span [class]="getOutcomeClass(experience.outcome)">
+                            <i [class]="getOutcomeIcon(experience.outcome)" class="me-1"></i>
+                            {{ experience.outcome | titlecase }}
+                          </span>
+                        </div>
+                      </div>
+                      <div class="d-flex align-items-center gap-2">
+                        <button 
+                          class="btn btn-sm"
+                          [class]="experience.isBookmarked ? 'btn-warning' : 'btn-outline-warning'"
+                          (click)="toggleBookmark(experience.id)"
+                        >
+                          <i class="bi bi-bookmark-fill"></i>
+                        </button>
+                      </div>
+                    </div>
+
+                    <!-- Author Info -->
+                    <div class="d-flex align-items-center mb-3">
+                      <img 
+                        [src]="experience.authorAvatar" 
+                        [alt]="experience.author"
+                        class="rounded-circle me-2"
+                        width="32"
+                        height="32"
+                      >
+                      <div>
+                        <small class="fw-medium">{{ experience.author }}</small>
+                        <small class="text-muted d-block">{{ formatDate(experience.date) }}</small>
+                      </div>
+                    </div>
+
+                    <!-- Rounds -->
+                    <div class="mb-3">
+                      <small class="text-muted d-block mb-1">Interview Rounds:</small>
+                      <div class="d-flex flex-wrap gap-1">
+                        @for (round of experience.rounds; track round) {
+                          <span class="badge bg-light text-dark">{{ round }}</span>
+                        }
+                      </div>
+                    </div>
+
+                    <!-- Content -->
+                    <p class="card-text">{{ experience.content }}</p>
+
+                    <!-- Tags -->
+                    <div class="mb-3">
+                      <div class="d-flex flex-wrap gap-1">
+                        @for (tag of experience.tags; track tag) {
+                          <span class="badge bg-secondary">#{{ tag }}</span>
+                        }
+                      </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div class="d-flex gap-3">
+                        <button 
+                          class="btn btn-sm"
+                          [class]="experience.userVote === 'up' ? 'btn-success' : 'btn-outline-success'"
+                          (click)="vote(experience.id, 'up')"
+                        >
+                          <i class="bi bi-arrow-up me-1"></i>
+                          {{ experience.upvotes }}
+                        </button>
+                        <button 
+                          class="btn btn-sm"
+                          [class]="experience.userVote === 'down' ? 'btn-danger' : 'btn-outline-danger'"
+                          (click)="vote(experience.id, 'down')"
+                        >
+                          <i class="bi bi-arrow-down me-1"></i>
+                          {{ experience.downvotes }}
+                        </button>
+                        <span class="btn btn-sm btn-outline-secondary">
+                          <i class="bi bi-chat me-1"></i>
+                          {{ experience.comments }}
+                        </span>
+                      </div>
+                      <small class="text-muted">
+                        Score: {{ getNetScore(experience) }}
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

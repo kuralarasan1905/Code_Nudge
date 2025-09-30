@@ -1,0 +1,299 @@
+<!-- Leaderboard Container -->
+<div class="container-fluid py-4">
+  <!-- Header Section -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <h1 class="h3 mb-1">Leaderboard</h1>
+          <p class="text-muted mb-0">Compete with fellow coders and climb the ranks</p>
+        </div>
+        <div class="d-flex gap-2">
+          <button class="btn btn-outline-primary" (click)="refreshLeaderboard()">
+            <i class="bi bi-arrow-clockwise me-1"></i>
+            Refresh
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Current User Rank Card -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm bg-primary text-white">
+        <div class="card-body">
+          <div class="row align-items-center">
+            <div class="col-md-8">
+              <h5 class="mb-1">Your Current Rank</h5>
+              <p class="mb-0 opacity-75">Keep solving problems to improve your ranking!</p>
+            </div>
+            <div class="col-md-4 text-md-end">
+              <div class="display-4 fw-bold">#{{ currentUserRank() }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs Navigation -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <ul class="nav nav-pills nav-fill">
+        <li class="nav-item">
+          <button 
+            class="nav-link"
+            [class.active]="activeTab() === 'global'"
+            (click)="setActiveTab('global')"
+          >
+            <i class="bi bi-globe me-2"></i>
+            Global Leaderboard
+          </button>
+        </li>
+        <li class="nav-item">
+          <button 
+            class="nav-link"
+            [class.active]="activeTab() === 'weekly'"
+            (click)="setActiveTab('weekly')"
+          >
+            <i class="bi bi-calendar-week me-2"></i>
+            Weekly Rankings
+          </button>
+        </li>
+        <li class="nav-item">
+          <button 
+            class="nav-link"
+            [class.active]="activeTab() === 'challenges'"
+            (click)="setActiveTab('challenges')"
+          >
+            <i class="bi bi-trophy me-2"></i>
+            Challenges
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  @if (isLoading()) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary mb-3" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="text-muted">Loading leaderboard data...</p>
+    </div>
+  }
+
+  <!-- Error State -->
+  @else if (error()) {
+    <div class="alert alert-danger" role="alert">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i>
+      {{ error() }}
+      <button class="btn btn-outline-danger btn-sm ms-3" (click)="refreshLeaderboard()">
+        <i class="bi bi-arrow-clockwise me-1"></i>
+        Retry
+      </button>
+    </div>
+  }
+
+  <!-- Content -->
+  @else {
+    <!-- Leaderboard Tables -->
+    @if (activeTab() === 'global' || activeTab() === 'weekly') {
+      <div class="row">
+        <div class="col-12">
+          <!-- Timeframe Filter -->
+          @if (activeTab() === 'global') {
+            <div class="d-flex justify-content-end mb-3">
+              <div class="btn-group" role="group">
+                <input type="radio" class="btn-check" name="timeframe" id="weekly" value="weekly" 
+                       [checked]="selectedTimeframe() === 'weekly'"
+                       (change)="setTimeframe('weekly')">
+                <label class="btn btn-outline-secondary btn-sm" for="weekly">Weekly</label>
+
+                <input type="radio" class="btn-check" name="timeframe" id="monthly" value="monthly"
+                       [checked]="selectedTimeframe() === 'monthly'"
+                       (change)="setTimeframe('monthly')">
+                <label class="btn btn-outline-secondary btn-sm" for="monthly">Monthly</label>
+
+                <input type="radio" class="btn-check" name="timeframe" id="alltime" value="alltime"
+                       [checked]="selectedTimeframe() === 'alltime'"
+                       (change)="setTimeframe('alltime')">
+                <label class="btn btn-outline-secondary btn-sm" for="alltime">All Time</label>
+              </div>
+            </div>
+          }
+
+          <!-- Top 3 Podium -->
+          <div class="row mb-4">
+            @for (entry of filteredLeaderboard().slice(0, 3); track entry.userId) {
+              <div class="col-md-4 mb-3">
+                <div class="card border-0 shadow-sm h-100" 
+                     [class.border-warning]="entry.rank === 1"
+                     [class.border-secondary]="entry.rank === 2"
+                     [class.border-warning]="entry.rank === 3">
+                  <div class="card-body text-center">
+                    <div class="position-relative mb-3">
+                      <img [src]="entry.profileImage" [alt]="entry.username || (entry.firstName + ' ' + entry.lastName)"
+                           class="rounded-circle" width="80" height="80">
+                      <div class="position-absolute top-0 end-0">
+                        <span class="badge rounded-pill" 
+                              [class.bg-warning]="entry.rank === 1"
+                              [class.bg-secondary]="entry.rank === 2"
+                              [class.bg-warning]="entry.rank === 3">
+                          {{ getRankIcon(entry.rank) }}
+                        </span>
+                      </div>
+                    </div>
+                    <h5 class="mb-1">{{ entry.username || (entry.firstName + ' ' + entry.lastName) }}</h5>
+                    <p class="text-muted mb-2">
+                      {{ getCountryFlag(entry.country || 'US') }} {{ entry.country || 'Unknown' }}
+                    </p>
+                    <div class="row text-center">
+                      <div class="col-4">
+                        <div class="fw-bold text-primary">{{ entry.score }}</div>
+                        <small class="text-muted">Score</small>
+                      </div>
+                      <div class="col-4">
+                        <div class="fw-bold text-success">{{ entry.questionsSolved }}</div>
+                        <small class="text-muted">Solved</small>
+                      </div>
+                      <div class="col-4">
+                        <div class="fw-bold text-warning">{{ entry.streak }}</div>
+                        <small class="text-muted">Streak</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+
+          <!-- Full Leaderboard Table -->
+          <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 py-3">
+              <h5 class="mb-0">
+                <i class="bi bi-list-ol me-2"></i>
+                {{ activeTab() === 'weekly' ? 'Weekly' : 'Global' }} Rankings
+              </h5>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Rank</th>
+                      <th>User</th>
+                      <th>Score</th>
+                      <th>Problems Solved</th>
+                      <th>Streak</th>
+                      <th>Country</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (entry of filteredLeaderboard(); track entry.userId) {
+                      <tr [class.table-primary]="entry.isCurrentUser">
+                        <td>
+                          <span [class]="getRankClass(entry.rank)">
+                            {{ getRankIcon(entry.rank) }}
+                          </span>
+                        </td>
+                        <td>
+                          <div class="d-flex align-items-center">
+                            <img [src]="entry.profileImage" [alt]="entry.username || (entry.firstName + ' ' + entry.lastName)"
+                                 class="rounded-circle me-2" width="32" height="32">
+                            <div>
+                              <div class="fw-semibold">
+                                {{ entry.username || (entry.firstName + ' ' + entry.lastName) }}
+                                @if (entry.isCurrentUser) {
+                                  <span class="badge bg-primary ms-1">You</span>
+                                }
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td class="fw-bold text-primary">{{ entry.score }}</td>
+                        <td class="text-success">{{ entry.questionsSolved }}</td>
+                        <td>
+                          <span class="badge bg-warning">{{ entry.streak }} days</span>
+                        </td>
+                        <td>
+                          {{ getCountryFlag(entry.country) }} {{ entry.country || 'Unknown' }}
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Challenges Tab -->
+    @if (activeTab() === 'challenges') {
+      <div class="row">
+        @for (challenge of challenges(); track challenge.id) {
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+              <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
+                <span [class]="getChallengeStatusClass(challenge.status)">
+                  {{ challenge.status | titlecase }}
+                </span>
+                <span [class]="getDifficultyClass(challenge.difficulty)">
+                  {{ challenge.difficulty | titlecase }}
+                </span>
+              </div>
+              <div class="card-body">
+                <h5 class="card-title">{{ challenge.title }}</h5>
+                <p class="card-text text-muted">{{ challenge.description }}</p>
+                
+                <div class="mb-3">
+                  <div class="row text-center">
+                    <div class="col-6">
+                      <div class="fw-bold text-primary">{{ challenge.participants }}</div>
+                      <small class="text-muted">Participants</small>
+                    </div>
+                    <div class="col-6">
+                      <div class="fw-bold text-success">{{ challenge.prize }}</div>
+                      <small class="text-muted">Prize</small>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <small class="text-muted">Duration:</small>
+                  <div>{{ challenge.startDate | date:'short' }} - {{ challenge.endDate | date:'short' }}</div>
+                  @if (challenge.status === 'active') {
+                    <div class="text-warning fw-semibold">
+                      <i class="bi bi-clock me-1"></i>
+                      {{ formatTimeRemaining(challenge.endDate) }}
+                    </div>
+                  }
+                </div>
+              </div>
+              <div class="card-footer bg-white border-0">
+                @if (challenge.status === 'active' || challenge.status === 'upcoming') {
+                  <button 
+                    class="btn btn-primary w-100"
+                    (click)="joinChallenge(challenge.id)"
+                  >
+                    <i class="bi bi-trophy me-1"></i>
+                    {{ challenge.status === 'active' ? 'Join Challenge' : 'Register' }}
+                  </button>
+                } @else {
+                  <button class="btn btn-outline-secondary w-100" disabled>
+                    <i class="bi bi-check-circle me-1"></i>
+                    Challenge Completed
+                  </button>
+                }
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  }
+</div>

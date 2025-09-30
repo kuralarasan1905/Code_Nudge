@@ -1,0 +1,405 @@
+<!-- User Management -->
+<div class="user-management">
+  <div class="container-fluid">
+    <!-- Header -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h1 class="h3 mb-0">User Management</h1>
+            <p class="text-muted mb-0">Manage platform users and permissions</p>
+          </div>
+          <div class="d-flex gap-2">
+            <button class="btn btn-outline-primary" (click)="exportUsers()">
+              <i class="bi bi-download me-2"></i>
+              Export
+            </button>
+            <button class="btn btn-primary" (click)="loadUsers()">
+              <i class="bi bi-arrow-clockwise me-2"></i>
+              Refresh
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row g-3 mb-4">
+      <div class="col-xl-2 col-lg-4 col-md-6">
+        <div class="card stat-card">
+          <div class="card-body text-center">
+            <div class="stat-icon bg-primary">
+              <i class="bi bi-people text-white"></i>
+            </div>
+            <h4 class="mb-1">{{ getUserStats().total }}</h4>
+            <small class="text-muted">Total Users</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-2 col-lg-4 col-md-6">
+        <div class="card stat-card">
+          <div class="card-body text-center">
+            <div class="stat-icon bg-success">
+              <i class="bi bi-person-check text-white"></i>
+            </div>
+            <h4 class="mb-1">{{ getUserStats().active }}</h4>
+            <small class="text-muted">Active Users</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-2 col-lg-4 col-md-6">
+        <div class="card stat-card">
+          <div class="card-body text-center">
+            <div class="stat-icon bg-info">
+              <i class="bi bi-mortarboard text-white"></i>
+            </div>
+            <h4 class="mb-1">{{ getUserStats().students }}</h4>
+            <small class="text-muted">Students</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-2 col-lg-4 col-md-6">
+        <div class="card stat-card">
+          <div class="card-body text-center">
+            <div class="stat-icon bg-danger">
+              <i class="bi bi-shield-check text-white"></i>
+            </div>
+            <h4 class="mb-1">{{ getUserStats().admins }}</h4>
+            <small class="text-muted">Admins</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-2 col-lg-4 col-md-6">
+        <div class="card stat-card">
+          <div class="card-body text-center">
+            <div class="stat-icon bg-warning">
+              <i class="bi bi-person-badge text-white"></i>
+            </div>
+            <h4 class="mb-1">{{ getUserStats().interviewers }}</h4>
+            <small class="text-muted">Interviewers</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="row g-3">
+              <div class="col-lg-4 col-md-6">
+                <label class="form-label">Search Users</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  placeholder="Search by name or email..."
+                  [(ngModel)]="searchTerm">
+              </div>
+              <div class="col-lg-2 col-md-6">
+                <label class="form-label">Role</label>
+                <select class="form-select" [(ngModel)]="selectedRole">
+                  @for (option of roleOptions; track option.value) {
+                    <option [value]="option.value">{{ option.label }}</option>
+                  }
+                </select>
+              </div>
+              <div class="col-lg-2 col-md-6">
+                <label class="form-label">Status</label>
+                <select class="form-select" [(ngModel)]="selectedStatus">
+                  @for (option of statusOptions; track option.value) {
+                    <option [value]="option.value">{{ option.label }}</option>
+                  }
+                </select>
+              </div>
+              <div class="col-lg-4 col-md-6">
+                <label class="form-label">&nbsp;</label>
+                <div class="d-flex gap-2">
+                  <button class="btn btn-outline-secondary" (click)="clearFilters()">
+                    <i class="bi bi-x-circle me-1"></i>
+                    Clear
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Error Message -->
+    @if (error()) {
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="alert alert-danger" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            {{ error() }}
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Loading State -->
+    @if (isLoading()) {
+      <div class="row">
+        <div class="col-12">
+          <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-3 text-muted">Loading users...</p>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Users List -->
+    @if (!isLoading()) {
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h5 class="mb-0">Users ({{ filteredUsers().length }})</h5>
+              <div class="text-muted">
+                Showing {{ filteredUsers().length }} of {{ users().length }} users
+              </div>
+            </div>
+            <div class="card-body p-0">
+              @if (filteredUsers().length > 0) {
+                <div class="table-responsive">
+                  <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                      <tr>
+                        <th>User</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Joined</th>
+                        <th>Last Active</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (user of filteredUsers(); track user.id) {
+                        <tr>
+                          <td>
+                            <div class="d-flex align-items-center">
+                              <div class="user-avatar me-3">
+                                @if (user.profileImage) {
+                                  <img [src]="user.profileImage" [alt]="formatUserName(user)" class="rounded-circle">
+                                } @else {
+                                  <div class="avatar-placeholder">
+                                    {{ user.firstName.charAt(0) }}{{ user.lastName.charAt(0) }}
+                                  </div>
+                                }
+                              </div>
+                              <div>
+                                <h6 class="mb-0">{{ formatUserName(user) }}</h6>
+                                <small class="text-muted">{{ user.email }}</small>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <select
+                              class="form-select form-select-sm"
+                              [value]="user.role"
+                              (change)="updateUserRole(user, $any($event.target).value)"
+                              [disabled]="isUpdating()">
+                              <option [value]="UserRole.STUDENT">Student</option>
+                              <option [value]="UserRole.ADMIN">Admin</option>
+                              <option [value]="UserRole.INTERVIEWER">Interviewer</option>
+                            </select>
+                          </td>
+                          <td>
+                            <div class="form-check form-switch">
+                              <input 
+                                class="form-check-input" 
+                                type="checkbox" 
+                                [checked]="user.isActive"
+                                (change)="toggleUserStatus(user)"
+                                [disabled]="isUpdating()">
+                              <label class="form-check-label">
+                                <span [class]="getStatusBadgeClass(user.isActive)">
+                                  {{ user.isActive ? 'Active' : 'Inactive' }}
+                                </span>
+                              </label>
+                            </div>
+                          </td>
+                          <td>{{ formatDate(user.createdAt) }}</td>
+                          <td>{{ formatDate(user.updatedAt) }}</td>
+                          <td>
+                            <div class="btn-group btn-group-sm">
+                              <button 
+                                class="btn btn-outline-primary" 
+                                (click)="openUserModal(user)"
+                                title="View Details">
+                                <i class="bi bi-eye"></i>
+                              </button>
+                              <button 
+                                class="btn btn-outline-warning" 
+                                (click)="resetUserPassword(user)"
+                                title="Reset Password"
+                                [disabled]="isUpdating()">
+                                <i class="bi bi-key"></i>
+                              </button>
+                              <button 
+                                class="btn btn-outline-info" 
+                                (click)="sendNotification(user)"
+                                title="Send Notification">
+                                <i class="bi bi-bell"></i>
+                              </button>
+                              <button 
+                                class="btn btn-outline-danger" 
+                                (click)="openDeleteModal(user)"
+                                title="Delete User">
+                                <i class="bi bi-trash"></i>
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              } @else {
+                <div class="text-center py-5">
+                  <i class="bi bi-people fs-1 text-muted"></i>
+                  <h5 class="mt-3">No users found</h5>
+                  <p class="text-muted">Try adjusting your filters to see more users.</p>
+                  <button class="btn btn-primary" (click)="clearFilters()">
+                    <i class="bi bi-funnel me-2"></i>
+                    Clear Filters
+                  </button>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>
+
+<!-- User Details Modal -->
+@if (showUserModal()) {
+  <div class="modal fade show d-block" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">User Details</h5>
+          <button type="button" class="btn-close" (click)="closeModals()"></button>
+        </div>
+        <div class="modal-body">
+          @if (selectedUser()) {
+            <div class="row g-3">
+              <div class="col-md-4 text-center">
+                <div class="user-avatar-large mb-3">
+                  @if (selectedUser()!.profileImage) {
+                    <img [src]="selectedUser()!.profileImage" [alt]="formatUserName(selectedUser()!)" class="rounded-circle">
+                  } @else {
+                    <div class="avatar-placeholder-large">
+                      {{ selectedUser()!.firstName.charAt(0) }}{{ selectedUser()!.lastName.charAt(0) }}
+                    </div>
+                  }
+                </div>
+                <h5>{{ formatUserName(selectedUser()!) }}</h5>
+                <span [class]="getRoleBadgeClass(selectedUser()!.role)">
+                  {{ selectedUser()!.role | titlecase }}
+                </span>
+              </div>
+              <div class="col-md-8">
+                <div class="row g-3">
+                  <div class="col-12">
+                    <label class="form-label">Email</label>
+                    <input type="text" class="form-control" [value]="selectedUser()!.email" readonly>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">First Name</label>
+                    <input type="text" class="form-control" [value]="selectedUser()!.firstName" readonly>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Last Name</label>
+                    <input type="text" class="form-control" [value]="selectedUser()!.lastName" readonly>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Role</label>
+                    <input type="text" class="form-control" [value]="selectedUser()!.role | titlecase" readonly>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Status</label>
+                    <input type="text" class="form-control" [value]="selectedUser()!.isActive ? 'Active' : 'Inactive'" readonly>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Joined</label>
+                    <input type="text" class="form-control" [value]="formatDate(selectedUser()!.createdAt)" readonly>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Last Updated</label>
+                    <input type="text" class="form-control" [value]="formatDate(selectedUser()!.updatedAt)" readonly>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeModals()">Close</button>
+          @if (selectedUser()) {
+            <button 
+              type="button" 
+              class="btn btn-warning" 
+              (click)="resetUserPassword(selectedUser()!)"
+              [disabled]="isUpdating()">
+              <i class="bi bi-key me-2"></i>
+              Reset Password
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-backdrop fade show"></div>
+}
+
+<!-- Delete Confirmation Modal -->
+@if (showDeleteModal()) {
+  <div class="modal fade show d-block" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Delete User</h5>
+          <button type="button" class="btn-close" (click)="closeModals()"></button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete this user?</p>
+          @if (selectedUser()) {
+            <div class="alert alert-warning">
+              <strong>{{ formatUserName(selectedUser()!) }}</strong><br>
+              <small>{{ selectedUser()!.email }}</small>
+            </div>
+          }
+          <p class="text-danger">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            This action cannot be undone. All user data will be permanently deleted.
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeModals()">Cancel</button>
+          <button 
+            type="button" 
+            class="btn btn-danger" 
+            (click)="deleteUser()"
+            [disabled]="isDeleting()">
+            @if (isDeleting()) {
+              <span class="spinner-border spinner-border-sm me-2"></span>
+              Deleting...
+            } @else {
+              <i class="bi bi-trash me-2"></i>
+              Delete User
+            }
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-backdrop fade show"></div>
+}

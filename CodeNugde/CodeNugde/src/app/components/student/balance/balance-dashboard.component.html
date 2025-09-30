@@ -1,0 +1,465 @@
+<div class="balance-dashboard">
+  <!-- Header -->
+  <div class="dashboard-header mb-4">
+    <div class="row align-items-center">
+      <div class="col-md-8">
+        <h2 class="mb-1">{{ getGreeting() }}</h2>
+        <p class="text-muted mb-0">Manage your balance and subscription</p>
+      </div>
+      <div class="col-md-4 text-end">
+        <button class="btn btn-outline-primary" (click)="refreshData()" [disabled]="isLoading()">
+          <i class="bi bi-arrow-clockwise me-2"></i>
+          Refresh
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading()" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-3 text-muted">Loading your balance information...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error()" class="alert alert-danger" role="alert">
+    <i class="bi bi-exclamation-triangle me-2"></i>
+    {{ error() }}
+  </div>
+
+  <!-- Main Content -->
+  <div *ngIf="!isLoading() && !error()">
+    <!-- Balance Overview Cards -->
+    <div class="row mb-4">
+      <div class="col-md-3">
+        <div class="card balance-card">
+          <div class="card-body text-center">
+            <i class="bi bi-wallet2 balance-icon text-primary"></i>
+            <h3 class="mt-2 mb-1" [class]="getBalanceStatusClass()">
+              {{ formatCredits(currentBalance()) }}
+            </h3>
+            <p class="text-muted mb-0">Current Balance</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-3">
+        <div class="card balance-card">
+          <div class="card-body text-center">
+            <i class="bi bi-star balance-icon text-warning"></i>
+            <h5 class="mt-2 mb-1">
+              <span [class]="getSubscriptionBadgeClass()">
+                {{ subscriptionStatus() | titlecase }}
+              </span>
+            </h5>
+            <p class="text-muted mb-0">Subscription Status</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-3" *ngIf="hasActiveSubscription()">
+        <div class="card balance-card">
+          <div class="card-body text-center">
+            <i class="bi bi-calendar-event balance-icon text-info"></i>
+            <h3 class="mt-2 mb-1 text-info">{{ daysUntilExpiry() }}</h3>
+            <p class="text-muted mb-0">Days Remaining</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-3">
+        <div class="card balance-card">
+          <div class="card-body text-center">
+            <i class="bi bi-graph-up balance-icon text-success"></i>
+            <h3 class="mt-2 mb-1 text-success">
+              {{ formatCurrency(userBalance()?.totalSpent || 0) }}
+            </h3>
+            <p class="text-muted mb-0">Total Spent</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <ul class="nav nav-tabs mb-4">
+      <li class="nav-item" *ngFor="let tab of tabOptions">
+        <button 
+          class="nav-link" 
+          [class.active]="selectedTab() === tab.id"
+          (click)="selectTab(tab.id)">
+          <i [class]="tab.icon + ' me-2'"></i>
+          {{ tab.label }}
+        </button>
+      </li>
+    </ul>
+
+    <!-- Tab Content -->
+    <div class="tab-content">
+      <!-- Overview Tab -->
+      <div *ngIf="selectedTab() === 'overview'" class="tab-pane fade show active">
+        <div class="row">
+          <!-- Quick Actions -->
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="mb-0">Quick Actions</h5>
+              </div>
+              <div class="card-body">
+                <div class="d-grid gap-2">
+                  <button class="btn btn-primary" (click)="selectTab('subscription')" *ngIf="!hasActiveSubscription()">
+                    <i class="bi bi-star me-2"></i>
+                    Subscribe to a Plan
+                  </button>
+                  <button class="btn btn-outline-primary" (click)="selectTab('transactions')">
+                    <i class="bi bi-plus-circle me-2"></i>
+                    Buy Credits
+                  </button>
+                  <button class="btn btn-outline-secondary" (click)="selectTab('payment-methods')">
+                    <i class="bi bi-credit-card me-2"></i>
+                    Manage Payment Methods
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Transactions -->
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Recent Transactions</h5>
+                <button class="btn btn-sm btn-outline-primary" (click)="selectTab('transactions')">
+                  View All
+                </button>
+              </div>
+              <div class="card-body">
+                <div *ngIf="transactions().length === 0" class="text-center text-muted py-3">
+                  No transactions yet
+                </div>
+                <div *ngFor="let transaction of transactions().slice(0, 5)" class="d-flex align-items-center mb-3">
+                  <i [class]="getTransactionIcon(transaction.type) + ' me-3'"></i>
+                  <div class="flex-grow-1">
+                    <div class="fw-medium">{{ formatTransactionType(transaction.type) }}</div>
+                    <small class="text-muted">{{ formatDate(transaction.createdAt) }}</small>
+                  </div>
+                  <div class="text-end">
+                    <div [class]="transaction.amount > 0 ? 'text-success' : 'text-danger'">
+                      {{ transaction.amount > 0 ? '+' : '' }}{{ formatCredits(Math.abs(transaction.amount)) }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Transactions Tab -->
+      <div *ngIf="selectedTab() === 'transactions'" class="tab-pane fade show active">
+        <div class="row">
+          <!-- Credit Packages -->
+          <div class="col-md-8">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="mb-0">Buy Credits</h5>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-6 mb-3" *ngFor="let package of creditPackages()">
+                    <div class="card credit-package" [class.popular]="package.isPopular">
+                      <div class="card-body text-center">
+                        <div *ngIf="package.isPopular" class="badge bg-warning mb-2">Popular</div>
+                        <h4 class="text-primary">{{ formatCredits(package.credits) }}</h4>
+                        <div *ngIf="package.bonusCredits > 0" class="text-success small">
+                          + {{ formatCredits(package.bonusCredits) }} bonus
+                        </div>
+                        <h3 class="mt-2">{{ formatCurrency(package.price) }}</h3>
+                        <p class="text-muted">{{ package.description }}</p>
+                        <button class="btn btn-primary w-100" (click)="showPurchaseCredits(package)">
+                          Purchase
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Transaction History -->
+          <div class="col-md-4">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="mb-0">Transaction History</h5>
+              </div>
+              <div class="card-body">
+                <div *ngIf="transactions().length === 0" class="text-center text-muted py-3">
+                  No transactions yet
+                </div>
+                <div *ngFor="let transaction of transactions()" class="transaction-item mb-3">
+                  <div class="d-flex align-items-center">
+                    <i [class]="getTransactionIcon(transaction.type) + ' me-3'"></i>
+                    <div class="flex-grow-1">
+                      <div class="fw-medium">{{ formatTransactionType(transaction.type) }}</div>
+                      <small class="text-muted">{{ formatDate(transaction.createdAt) }}</small>
+                    </div>
+                    <div class="text-end">
+                      <div [class]="transaction.amount > 0 ? 'text-success' : 'text-danger'">
+                        {{ transaction.amount > 0 ? '+' : '' }}{{ formatCredits(Math.abs(transaction.amount)) }}
+                      </div>
+                      <small class="text-muted">{{ transaction.status | titlecase }}</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Subscription Tab -->
+      <div *ngIf="selectedTab() === 'subscription'" class="tab-pane fade show active">
+        <!-- Current Subscription -->
+        <div *ngIf="hasActiveSubscription()" class="card mb-4">
+          <div class="card-header">
+            <h5 class="mb-0">Current Subscription</h5>
+          </div>
+          <div class="card-body">
+            <div class="row align-items-center">
+              <div class="col-md-8">
+                <h4>{{ userSubscription()?.plan?.name }}</h4>
+                <p class="text-muted mb-2">{{ userSubscription()?.plan?.description }}</p>
+                <div class="d-flex gap-3">
+                  <span class="badge bg-success">{{ formatCredits(userSubscription()?.creditsRemaining || 0) }} remaining</span>
+                  <span class="text-muted">Expires: {{ formatDate(userSubscription()?.endDate || '') }}</span>
+                </div>
+              </div>
+              <div class="col-md-4 text-end">
+                <button class="btn btn-outline-danger" (click)="cancelSubscription()">
+                  Cancel Subscription
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Available Plans -->
+        <div class="card">
+          <div class="card-header">
+            <h5 class="mb-0">{{ hasActiveSubscription() ? 'Upgrade Plans' : 'Choose a Plan' }}</h5>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-4 mb-3" *ngFor="let plan of subscriptionPlans()">
+                <div class="card subscription-plan" [class.popular]="plan.isPopular">
+                  <div class="card-body text-center">
+                    <div *ngIf="plan.isPopular" class="badge bg-warning mb-2">Most Popular</div>
+                    <h4>{{ plan.name }}</h4>
+                    <h2 class="text-primary">{{ formatCurrency(plan.price) }}</h2>
+                    <p class="text-muted">per {{ plan.duration }}</p>
+                    <div class="mb-3">
+                      <div class="fw-bold text-success">{{ formatCredits(plan.credits) }} included</div>
+                    </div>
+                    <ul class="list-unstyled text-start">
+                      <li *ngFor="let feature of plan.features" class="mb-1">
+                        <i class="bi bi-check-circle text-success me-2"></i>
+                        {{ feature }}
+                      </li>
+                    </ul>
+                    <button 
+                      class="btn w-100 mt-3"
+                      [class]="plan.isPopular ? 'btn-primary' : 'btn-outline-primary'"
+                      (click)="showSubscribeToPlan(plan)">
+                      {{ hasActiveSubscription() ? 'Upgrade' : 'Subscribe' }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Methods Tab -->
+      <div *ngIf="selectedTab() === 'payment-methods'" class="tab-pane fade show active">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Payment Methods</h5>
+            <button class="btn btn-primary" (click)="addPaymentMethod()">
+              <i class="bi bi-plus me-2"></i>
+              Add Payment Method
+            </button>
+          </div>
+          <div class="card-body">
+            <div *ngIf="paymentMethods().length === 0" class="text-center text-muted py-4">
+              <i class="bi bi-credit-card display-4 text-muted"></i>
+              <p class="mt-3">No payment methods added yet</p>
+              <button class="btn btn-primary" (click)="addPaymentMethod()">
+                Add Your First Payment Method
+              </button>
+            </div>
+            
+            <div *ngFor="let method of paymentMethods()" class="payment-method-item mb-3">
+              <div class="card">
+                <div class="card-body">
+                  <div class="row align-items-center">
+                    <div class="col-md-8">
+                      <div class="d-flex align-items-center">
+                        <i class="bi bi-credit-card me-3 text-primary"></i>
+                        <div>
+                          <div class="fw-medium">
+                            {{ method.cardBrand | titlecase }} ending in {{ method.last4Digits }}
+                            <span *ngIf="method.isDefault" class="badge bg-primary ms-2">Default</span>
+                          </div>
+                          <small class="text-muted">
+                            Expires {{ method.expiryMonth }}/{{ method.expiryYear }}
+                          </small>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 text-end">
+                      <div class="btn-group">
+                        <button 
+                          *ngIf="!method.isDefault"
+                          class="btn btn-sm btn-outline-primary" 
+                          (click)="setDefaultPaymentMethod(method.id)">
+                          Set Default
+                        </button>
+                        <button 
+                          class="btn btn-sm btn-outline-danger" 
+                          (click)="deletePaymentMethod(method.id)">
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Billing History Tab -->
+      <div *ngIf="selectedTab() === 'billing'" class="tab-pane fade show active">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="mb-0">Billing History</h5>
+          </div>
+          <div class="card-body">
+            <div *ngIf="billingHistory().length === 0" class="text-center text-muted py-4">
+              <i class="bi bi-receipt display-4 text-muted"></i>
+              <p class="mt-3">No billing history available</p>
+            </div>
+            
+            <div class="table-responsive" *ngIf="billingHistory().length > 0">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Period</th>
+                    <th>Status</th>
+                    <th>Invoice</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let bill of billingHistory()">
+                    <td>{{ formatDate(bill.createdAt) }}</td>
+                    <td>{{ formatCurrency(bill.amount) }}</td>
+                    <td>
+                      {{ formatDate(bill.billingPeriodStart) }} - 
+                      {{ formatDate(bill.billingPeriodEnd) }}
+                    </td>
+                    <td>
+                      <span class="badge" [class]="'bg-' + (bill.status === 'paid' ? 'success' : bill.status === 'pending' ? 'warning' : 'danger')">
+                        {{ bill.status | titlecase }}
+                      </span>
+                    </td>
+                    <td>
+                      <a *ngIf="bill.invoiceUrl" [href]="bill.invoiceUrl" target="_blank" class="btn btn-sm btn-outline-primary">
+                        <i class="bi bi-download me-1"></i>
+                        Download
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modals -->
+<div *ngIf="showPurchaseModal()" class="modal fade show d-block" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          {{ selectedPackage() ? 'Purchase Credits' : 'Subscribe to Plan' }}
+        </h5>
+        <button type="button" class="btn-close" (click)="closeModals()"></button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="selectedPackage()" class="text-center mb-4">
+          <h4>{{ formatCredits(selectedPackage()!.credits) }}</h4>
+          <div *ngIf="selectedPackage()!.bonusCredits > 0" class="text-success">
+            + {{ formatCredits(selectedPackage()!.bonusCredits) }} bonus credits
+          </div>
+          <h3 class="text-primary mt-2">{{ formatCurrency(selectedPackage()!.price) }}</h3>
+        </div>
+
+        <div *ngIf="selectedPlan()" class="text-center mb-4">
+          <h4>{{ selectedPlan()!.name }}</h4>
+          <h3 class="text-primary">{{ formatCurrency(selectedPlan()!.price) }}</h3>
+          <p class="text-muted">per {{ selectedPlan()!.duration }}</p>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Select Payment Method</label>
+          <select class="form-select" #paymentMethodSelect>
+            <option value="">Choose payment method...</option>
+            <option *ngFor="let method of paymentMethods()" [value]="method.id">
+              {{ method.cardBrand | titlecase }} ending in {{ method.last4Digits }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeModals()">Cancel</button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          [disabled]="!paymentMethodSelect.value"
+          (click)="selectedPackage() ? purchaseCredits(selectedPackage()!.id, paymentMethodSelect.value) : subscribeToPlan(selectedPlan()!.id, paymentMethodSelect.value)">
+          {{ selectedPackage() ? 'Purchase Credits' : 'Subscribe Now' }}
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="modal-backdrop fade show"></div>
+</div>
+
+<div *ngIf="showAddPaymentModal()" class="modal fade show d-block" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add Payment Method</h5>
+        <button type="button" class="btn-close" (click)="closeModals()"></button>
+      </div>
+      <div class="modal-body">
+        <p class="text-muted">Payment method form will be implemented here with Stripe or other payment processor integration.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeModals()">Cancel</button>
+        <button type="button" class="btn btn-primary">Add Payment Method</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal-backdrop fade show"></div>
+</div>
